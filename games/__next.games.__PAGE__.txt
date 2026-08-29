@@ -1,10 +1,10 @@
 1:"$Sreact.fragment"
 2:I[47257,["/yue-card-maker/_next/static/chunks/0dbhjjzl8qfwv.js"],"ClientPageRoot"]
-3:I[32541,["/yue-card-maker/_next/static/chunks/0dbhjjzl8qfwv.js","/yue-card-maker/_next/static/chunks/0z9-os2qk2t3d.js"],"default"]
+3:I[32541,["/yue-card-maker/_next/static/chunks/0dbhjjzl8qfwv.js","/yue-card-maker/_next/static/chunks/0clpa966onpj_.js"],"default"]
 6:I[97367,["/yue-card-maker/_next/static/chunks/0dbhjjzl8qfwv.js"],"OutletBoundary"]
 7:"$Sreact.suspense"
-:HL["/yue-card-maker/_next/static/chunks/0ozsd~.z8owep.css","style"]
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","link","0",{"rel":"stylesheet","href":"/yue-card-maker/_next/static/chunks/0ozsd~.z8owep.css","precedence":"next"}],["$","script","script-0",{"src":"/yue-card-maker/_next/static/chunks/0z9-os2qk2t3d.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"bjIFNQBeaEDeifU-oSGp4"}
+:HL["/yue-card-maker/_next/static/chunks/14r9uz34sfi1-.css","style"]
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","link","0",{"rel":"stylesheet","href":"/yue-card-maker/_next/static/chunks/14r9uz34sfi1-.css","precedence":"next"}],["$","script","script-0",{"src":"/yue-card-maker/_next/static/chunks/0clpa966onpj_.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"xLtEK3bpixplkPHRbBfrP"}
 4:{}
 5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
 8:null
