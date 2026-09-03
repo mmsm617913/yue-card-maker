@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f35f55" />
+  <meta name="description" content="貼上 YouTube 或匯入音樂影片，以 30 秒、60 秒或整首跟拍找出平均 BPM。" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="月月節拍器" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
+  <title>月月計算節拍器</title>
+  <style>
+    :root {
+      --cream:#fff8e8; --paper:#fffdf7; --coral:#f35f55; --coral-dark:#c83f3b;
+      --wine:#6f2f3b; --yellow:#ffd35c; --blue:#68b9db; --pink:#ffb7bc;
+      --ink:#3e3032; --muted:#765f60; --line:#e9cfc4; --green:#4f9c73;
+      --shadow:0 12px 34px rgba(111,47,59,.13); --radius:26px;
+    }
+    *{box-sizing:border-box}
+    [hidden]{display:none!important}
+    html{font-size:16px}
+    body{margin:0;min-height:100vh;color:var(--ink);font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;background:
+      radial-gradient(circle at 7% 10%,rgba(255,211,92,.33) 0 9px,transparent 10px),
+      radial-gradient(circle at 93% 16%,rgba(104,185,219,.27) 0 8px,transparent 9px),
+      radial-gradient(circle at 88% 88%,rgba(255,183,188,.30) 0 12px,transparent 13px),
+      var(--cream);overflow-x:hidden}
+    button,input{font:inherit}
+    button{touch-action:manipulation}
+    .shell{width:min(1280px,100%);margin:auto;padding:20px clamp(16px,3vw,36px) 38px;position:relative}
+    header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .moon{width:58px;height:58px;display:block;border-radius:19px;background:var(--yellow);box-shadow:0 7px 0 #e5a82e;transform:rotate(-4deg);object-fit:cover}
+    h1{font-size:clamp(1.55rem,3vw,2.35rem);line-height:1.15;margin:0;color:var(--wine);letter-spacing:.02em}
+    .sub{font-size:.98rem;color:var(--muted);font-weight:700;margin-top:4px}
+    .top-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+    .mini{border:2px solid var(--line);background:var(--paper);color:var(--wine);border-radius:14px;padding:10px 14px;font-weight:800;cursor:pointer}
+    .install-btn{border-color:var(--coral);background:var(--coral);color:white}
+    .mobile-nav{display:none;grid-template-columns:1fr 1fr;gap:7px;background:#f2ded5;padding:6px;border-radius:17px;margin-bottom:12px;position:sticky;top:8px;z-index:9;box-shadow:0 6px 18px rgba(111,47,59,.11)}
+    .mobile-nav button{border:0;border-radius:12px;padding:11px 8px;background:transparent;color:var(--muted);font-weight:900}
+    .mobile-nav button.active{background:var(--paper);color:var(--coral-dark);box-shadow:0 3px 9px rgba(111,47,59,.1)}
+    .layout{display:grid;grid-template-columns:minmax(280px,.88fr) minmax(360px,1.35fr);gap:18px;align-items:start}
+    .panel{background:rgba(255,253,247,.94);border:2px solid rgba(233,207,196,.9);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .panel-pad{padding:clamp(18px,2.5vw,28px)}
+    .section-title{display:flex;align-items:center;gap:10px;color:var(--wine);font-size:1.2rem;font-weight:900;margin:0 0 14px}
+    .step{display:grid;place-items:center;width:31px;height:31px;border-radius:11px;background:var(--coral);color:white;font-size:.95rem}
+    .source-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f7e9e2;border-radius:17px;padding:6px;margin-bottom:14px}
+    .tab{border:0;border-radius:12px;padding:12px 8px;background:transparent;color:var(--muted);font-weight:900;cursor:pointer}
+    .tab.active{background:var(--paper);color:var(--coral-dark);box-shadow:0 3px 10px rgba(111,47,59,.1)}
+    .source-pane{display:none}.source-pane.active{display:block}
+    .input-row{display:flex;gap:9px}
+    .url{min-width:0;flex:1;border:2px solid var(--line);border-radius:14px;padding:13px 14px;background:white;color:var(--ink);outline:none}
+    .url:focus{border-color:var(--coral);box-shadow:0 0 0 4px rgba(243,95,85,.13)}
+    .primary,.secondary,.tap-btn,.count-btn{border:0;border-radius:15px;font-weight:900;cursor:pointer;transition:transform .12s,filter .12s;box-shadow:0 5px 0 rgba(111,47,59,.18)}
+    button:active{transform:translateY(3px);box-shadow:none}
+    button:disabled{cursor:not-allowed;opacity:.48;filter:grayscale(.35);box-shadow:none;transform:none}
+    .primary{background:var(--coral);color:white;padding:13px 17px}
+    .secondary{background:var(--yellow);color:var(--wine);padding:13px 17px}
+    .upload{display:grid;place-items:center;text-align:center;min-height:132px;border:3px dashed #e7afa4;border-radius:18px;background:#fff7f1;padding:18px;cursor:pointer;color:var(--wine);font-weight:900}
+    .upload:hover{background:#fff0e7}
+    .upload small{display:block;color:var(--muted);font-weight:700;margin-top:6px}
+    #fileInput{display:none}
+    .media-wrap{margin-top:14px;border-radius:17px;overflow:hidden;background:#3a292c;display:none;position:relative}
+    .media-wrap.ready{display:block}
+    .media-wrap iframe,.media-wrap video{display:block;width:100%;aspect-ratio:16/9;border:0;background:#251d1f}
+    .media-wrap audio{display:block;width:100%;min-height:54px;background:#fff2ea}
+    .hint{display:flex;gap:9px;margin-top:12px;padding:11px 12px;border-radius:14px;background:#eaf7fc;color:#315b6a;font-size:.88rem;font-weight:700;line-height:1.5}
+    .mode-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:11px;margin-top:18px}
+    .mode-card{border:2px solid var(--line);border-radius:18px;padding:15px;background:white}
+    .mode-card h3{font-size:1rem;color:var(--wine);margin:0 0 5px}.mode-card p{font-size:.84rem;color:var(--muted);margin:0 0 12px;line-height:1.45}
+    .mode-card button{width:100%}
+    .tap-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .tap-option{position:relative;border:2px solid var(--line);border-radius:13px;background:#fff8f1;color:var(--wine);padding:11px 7px;font-weight:900;cursor:pointer}
+    .tap-option.recommended{border-color:var(--coral);background:#fff0eb;color:var(--coral-dark)}
+    .tap-option small{display:block;font-size:.7rem;margin-top:3px;color:var(--muted)}
+    .status{min-height:24px;margin-top:12px;color:var(--muted);font-size:.9rem;font-weight:800}
+    .progress{height:10px;background:#f1dfd8;border-radius:999px;overflow:hidden;display:none;margin-top:8px}.progress.show{display:block}.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--yellow));border-radius:inherit;transition:width .2s}
+    .result{position:relative;padding:clamp(22px,4vw,42px);min-height:540px;display:flex;flex-direction:column;align-items:center;text-align:center;background:
+      linear-gradient(150deg,rgba(255,255,255,.82),rgba(255,246,231,.9)),var(--paper)}
+    .result:before,.result:after{content:"✦";position:absolute;color:var(--pink);font-size:48px;opacity:.5}.result:before{left:24px;top:20px;transform:rotate(-15deg)}.result:after{right:24px;bottom:20px;color:var(--blue);transform:rotate(20deg)}
+    .result-label{font-weight:900;color:var(--coral-dark);letter-spacing:.12em;margin-bottom:6px}
+    .bpm-row{display:flex;align-items:baseline;justify-content:center;gap:10px;line-height:1}
+    .bpm{font-family:ui-rounded,"Arial Rounded MT Bold",system-ui,sans-serif;font-size:clamp(5rem,12vw,9.5rem);font-weight:1000;color:var(--wine);letter-spacing:-.07em;text-shadow:0 7px 0 rgba(243,95,85,.13)}
+    .unit{font-size:clamp(1.2rem,3vw,2rem);font-weight:1000;color:var(--coral)}
+    .tempo-name{display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:var(--yellow);color:var(--wine);font-weight:900;padding:9px 18px;margin-top:8px}
+    .empty-note{color:var(--muted);font-weight:750;line-height:1.6;max-width:420px;margin-top:16px}
+    .metrics{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:22px}
+    .metric{border-radius:17px;background:white;border:2px solid #f0ddd5;padding:13px 8px}
+    .metric b{display:block;font-size:1.25rem;color:var(--wine)}.metric span{font-size:.78rem;color:var(--muted);font-weight:800}
+    .adjust{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+    .chip{border:2px solid var(--line);border-radius:999px;background:white;color:var(--wine);padding:8px 13px;font-weight:900;cursor:pointer}
+    .beat-stage{width:100%;display:flex;flex-direction:column;align-items:center;margin-top:auto;padding-top:24px}
+    .beat-orb{width:124px;height:124px;border-radius:50%;display:grid;place-items:center;background:var(--blue);border:8px solid white;box-shadow:0 9px 0 #3d89aa,0 14px 25px rgba(61,137,170,.28);color:white;font-size:3.7rem;font-weight:1000;transition:transform .1s,background .1s}
+    .beat-orb.pulse{transform:scale(1.13);background:var(--coral)}
+    .dots{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;width:min(100%,440px);margin:18px 0 15px}.dot{height:13px;border-radius:999px;background:#ead7cf}.dot.on{background:var(--coral);transform:scaleY(1.45)}
+    .count-btn{background:var(--wine);color:white;padding:14px 23px;min-width:190px}
+    .tap-overlay{position:fixed;inset:0;z-index:20;background:rgba(62,48,50,.84);display:none;place-items:center;padding:18px;backdrop-filter:blur(8px)}
+    .tap-overlay.show{display:grid}
+    .tap-box{width:min(520px,100%);background:var(--paper);border-radius:30px;padding:24px;text-align:center;box-shadow:0 25px 70px rgba(0,0,0,.28)}
+    .tap-box h2{color:var(--wine);font-size:1.45rem;margin:0 0 6px}.tap-box p{color:var(--muted);margin:0 0 17px;font-weight:700;line-height:1.5}
+    .tap-live{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+    .tap-live div{background:#fff2e9;border:2px solid #f1d6ca;border-radius:15px;padding:10px}
+    .tap-live b{display:block;color:var(--wine);font-size:1.45rem}.tap-live span{color:var(--muted);font-size:.78rem;font-weight:800}
+    .tap-progress{font-size:1.05rem;color:var(--coral-dark);font-weight:1000;margin-bottom:10px}
+    .tap-btn{width:100%;aspect-ratio:1.55;background:var(--coral);color:white;font-size:clamp(2rem,8vw,3.4rem);letter-spacing:.05em;box-shadow:0 9px 0 var(--coral-dark)}
+    .tap-btn.flash{background:var(--yellow);color:var(--wine);transform:scale(.97)}
+    .finish-tap{width:100%;margin-top:12px;border:0;border-radius:14px;background:var(--wine);color:white;padding:13px;font-weight:900;cursor:pointer}
+    .tap-help{font-size:.8rem!important;margin:13px 0!important}.close{border:0;background:transparent;color:var(--muted);font-weight:900;padding:9px 15px;cursor:pointer}
+    .install-overlay{position:fixed;inset:0;z-index:25;background:rgba(62,48,50,.82);display:none;place-items:end center;padding:18px;backdrop-filter:blur(7px)}
+    .install-overlay.show{display:grid}
+    .install-card{width:min(470px,100%);background:var(--paper);border-radius:27px;padding:23px;box-shadow:0 24px 70px rgba(0,0,0,.3)}
+    .install-card h2{margin:0 0 8px;color:var(--wine);font-size:1.35rem}.install-card p{color:var(--muted);font-weight:700;line-height:1.55}.install-card ol{margin:12px 0 16px;padding-left:24px;color:var(--ink);font-weight:800;line-height:1.65}.install-card .primary{width:100%}
+    footer{text-align:center;color:#8d7372;font-weight:800;font-size:.85rem;margin-top:18px}
+    .toast{position:fixed;left:50%;bottom:22px;z-index:30;transform:translate(-50%,120px);background:var(--wine);color:white;padding:12px 18px;border-radius:999px;font-weight:800;transition:transform .28s;box-shadow:var(--shadow)}.toast.show{transform:translate(-50%,0)}
+    @media(max-width:820px){header{align-items:flex-start}.layout{grid-template-columns:1fr}.result{min-height:510px}}
+    @media(max-width:600px){body{min-width:320px}.shell{width:100%;max-width:480px;padding:10px 10px max(22px,env(safe-area-inset-bottom))}.mobile-nav{display:grid}.workspace-view{display:none}.workspace-view.mobile-active{display:flex}.panel-pad.workspace-view.mobile-active{display:block}.layout{display:block}.brand{min-width:0}.brand>div{min-width:0}h1{font-size:1.45rem;white-space:nowrap}.moon{width:48px;height:48px;border-radius:15px}.sub{font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top-actions{width:100%;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px}.mini{width:100%;padding:9px 5px;font-size:.78rem}.panel{width:100%;border-radius:20px}.panel-pad{padding:15px}.source-tabs{margin-bottom:10px}.tab{padding:10px 5px}.media-wrap{margin-top:10px}.hint{font-size:.78rem;padding:8px 9px}.section-title{font-size:1.06rem;margin-bottom:10px}.mode-grid{grid-template-columns:1fr;margin-top:12px}.mode-card{padding:12px}.mode-card p{margin-bottom:9px}.tap-option{padding:9px 5px}.status{font-size:.82rem;margin-top:9px}.input-row{flex-direction:column;gap:7px}.input-row .primary{width:100%}.upload{min-height:100px;padding:12px}.result{padding:20px 13px;min-height:calc(100dvh - 145px)}.bpm{font-size:clamp(5rem,30vw,8.2rem)}.metrics{grid-template-columns:repeat(2,1fr);gap:5px;margin-top:15px}.metric{padding:9px 4px}.metric b{font-size:1rem}.beat-stage{padding-top:16px}.beat-orb{width:100px;height:100px;font-size:2.9rem}.dots{margin:14px 0 12px}footer{font-size:.76rem;margin-top:12px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand"><img class="moon" src="icons/icon-192.png" alt="月亮與音符圖示"><div><h1>月月計算節拍器</h1><div class="sub">30 秒平均・60 秒精測・全曲跟拍</div></div></div>
+      <div class="top-actions"><button class="mini install-btn" id="installBtn" type="button">⬇ 安裝 App</button><button class="mini" id="soundBtn" type="button">🔊 音效開</button><button class="mini" id="fullBtn" type="button">⛶ 全螢幕</button></div>
+    </header>
+
+    <nav class="mobile-nav" aria-label="手機操作分頁"><button class="active" data-mobile-view="measure" type="button">🎵 音樂與測量</button><button data-mobile-view="result" type="button">📊 BPM 結果</button></nav>
+
+    <div class="layout">
+      <section class="panel panel-pad workspace-view mobile-active" data-view="measure" aria-labelledby="sourceTitle">
+        <h2 class="section-title" id="sourceTitle"><span class="step">1</span>放入要測的音樂</h2>
+        <div class="source-tabs" role="tablist" aria-label="音樂來源">
+          <button class="tab active" data-tab="youtube" role="tab" aria-selected="true">▶ YouTube</button>
+          <button class="tab" data-tab="file" role="tab" aria-selected="false">⬆ 上傳影音</button>
+        </div>
+        <div class="source-pane active" id="youtubePane">
+          <div class="input-row"><input class="url" id="youtubeUrl" inputmode="url" placeholder="貼上 YouTube 網址" aria-label="YouTube 網址"><button class="primary" id="loadYoutube" type="button">載入</button></div>
+          <div class="hint"><span>💡</span><span>YouTube 受平台保護，網頁不能直接擷取音訊；載入播放後，建議跟著重拍連續按 30 或 60 秒。</span></div>
+        </div>
+        <div class="source-pane" id="filePane">
+          <label class="upload" for="fileInput">🎵 點這裡選擇音樂或影片<small>支援手機拍攝影片、MP3、M4A、WAV、MP4 等瀏覽器可播放格式</small></label>
+          <input id="fileInput" type="file" accept="audio/*,video/*">
+        </div>
+        <div class="media-wrap" id="mediaWrap" aria-live="polite"></div>
+
+        <h2 class="section-title" style="margin-top:22px"><span class="step">2</span>選擇計算方式</h2>
+        <div class="mode-grid">
+          <article class="mode-card"><h3>👏 跟著節拍連續按</h3><p>測量越久，平均值越穩。30 秒是日常備課最實用的選擇。</p><div class="tap-options"><button class="tap-option" data-tap-mode="8" type="button">8 拍快測<small>粗略預估</small></button><button class="tap-option recommended" data-tap-mode="30" type="button">30 秒平均<small>推薦使用</small></button><button class="tap-option" data-tap-mode="60" type="button">60 秒精測<small>結果更穩</small></button><button class="tap-option" data-tap-mode="full" type="button">整首跟拍<small>手動結束</small></button></div></article>
+          <article class="mode-card"><h3>✨ 檔案自動分析</h3><p>只有自己上傳的影音可以自動聆聽整首歌。</p><button class="primary" id="analyzeFull" type="button" disabled>自動分析整首</button></article>
+        </div>
+        <div class="status" id="status" aria-live="polite">請先載入 YouTube，或上傳一個影音檔。</div>
+        <div class="progress" id="progress" aria-hidden="true"><i id="progressBar"></i></div>
+      </section>
+
+      <section class="panel result workspace-view" data-view="result" aria-labelledby="resultTitle">
+        <div class="result-label" id="resultTitle">目前測得速度</div>
+        <div class="bpm-row"><span class="bpm" id="bpmValue">—</span><span class="unit">BPM</span></div>
+        <div class="tempo-name" id="tempoName">等待測量</div>
+        <p class="empty-note" id="emptyNote">BPM 是「每分鐘幾拍」。建議至少跟拍 30 秒，拉長取樣時間會比只按前 8 拍更穩定。</p>
+        <div class="metrics">
+          <div class="metric"><b id="beatSeconds">—</b><span>每拍秒數</span></div>
+          <div class="metric"><b id="eightSeconds">—</b><span>一組 8 拍</span></div>
+          <div class="metric"><b id="sampleTaps">—</b><span>取樣拍數</span></div>
+          <div class="metric"><b id="sampleTime">—</b><span>測量時間</span></div>
+          <div class="metric"><b id="confidence">—</b><span>分析可信度</span></div>
+        </div>
+        <div class="adjust" id="adjust" hidden><button class="chip" id="halfBtn" type="button">÷2 慢一倍</button><button class="chip" id="minusBtn" type="button">−1</button><button class="chip" id="plusBtn" type="button">＋1</button><button class="chip" id="doubleBtn" type="button">×2 快一倍</button></div>
+        <div class="beat-stage">
+          <div class="beat-orb" id="beatOrb" aria-live="polite">♪</div>
+          <div class="dots" aria-hidden="true"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+          <button class="count-btn" id="countBtn" type="button" disabled>▶ 播放 8 拍節拍</button>
+        </div>
+      </section>
+    </div>
+    <footer>設計者：月月🌙　｜　適合步步為營、樂齡律動與課堂音樂備課</footer>
+  </main>
+
+  <div class="tap-overlay" id="tapOverlay" role="dialog" aria-modal="true" aria-labelledby="tapTitle">
+    <div class="tap-box"><h2 id="tapTitle">30 秒連續跟拍</h2><p id="tapIntro">先播放音樂，聽到每一個重拍就按一下。第一下會開始倒數。</p><div class="tap-live"><div><b id="tapCount">0 拍</b><span>目前按鍵</span></div><div><b id="tapClock">30.0 秒</b><span id="tapClockLabel">剩餘時間</span></div></div><div class="tap-progress" id="tapProgress">準備好後，按第 1 拍</div><button class="tap-btn" id="tapBtn" type="button">跟著拍</button><button class="finish-tap" id="finishTap" type="button" hidden>完成並計算 BPM</button><p class="tap-help">電腦也可以按空白鍵。請跟著穩定重拍一路按，不必數 1～8。</p><button class="close" id="closeTap" type="button">取消</button></div>
+  </div>
+  <div class="install-overlay" id="installOverlay" role="dialog" aria-modal="true" aria-labelledby="installTitle">
+    <div class="install-card"><h2 id="installTitle">把月月節拍器放到主畫面</h2><p>安裝後會像一般 App 一樣顯示「月亮＋音符」圖示，開啟時不會出現瀏覽器工具列。</p><ol id="installSteps"><li>使用 Safari 開啟這個網站</li><li>按下方的「分享」按鈕</li><li>選擇「加入主畫面」</li><li>按右上角「新增」</li></ol><button class="primary" id="closeInstall" type="button">我知道了</button></div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+  (()=>{
+    const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+    const state={source:'youtube',file:null,fileUrl:null,media:null,bpm:null,sound:true,countTimer:null,count:0,taps:[],tapMode:'30',tapStart:null,tapTick:null,sampleMeta:null};
+    const els={mediaWrap:$('#mediaWrap'),status:$('#status'),progress:$('#progress'),progressBar:$('#progressBar'),bpm:$('#bpmValue'),tempo:$('#tempoName'),beatSec:$('#beatSeconds'),eightSec:$('#eightSeconds'),sampleTaps:$('#sampleTaps'),sampleTime:$('#sampleTime'),confidence:$('#confidence'),empty:$('#emptyNote'),adjust:$('#adjust'),orb:$('#beatOrb'),countBtn:$('#countBtn'),overlay:$('#tapOverlay'),tapProgress:$('#tapProgress'),tapBtn:$('#tapBtn'),tapTitle:$('#tapTitle'),tapIntro:$('#tapIntro'),tapCount:$('#tapCount'),tapClock:$('#tapClock'),tapClockLabel:$('#tapClockLabel'),finishTap:$('#finishTap')};
+    function switchMobileView(view,scroll=false){$$('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view));$$('.workspace-view').forEach(p=>p.classList.toggle('mobile-active',p.dataset.view===view));if(scroll&&matchMedia('(max-width:600px)').matches)scrollTo({top:0,behavior:'smooth'})}
+    $$('[data-mobile-view]').forEach(b=>b.addEventListener('click',()=>switchMobileView(b.dataset.mobileView,true)));
+    let audioCtx;
+    function ctx(){return audioCtx||(audioCtx=new (window.AudioContext||window.webkitAudioContext)())}
+    function beep(accent=false){if(!state.sound)return;const c=ctx(),o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=accent?690:470;g.gain.setValueAtTime(.001,c.currentTime);g.gain.exponentialRampToValueAtTime(accent ? .16 : .085,c.currentTime+.008);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.09);o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+.1)}
+    function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._id);t._id=setTimeout(()=>t.classList.remove('show'),2200)}
+    function setStatus(msg){els.status.textContent=msg}
+    function getYoutubeId(v){try{const u=new URL(v.trim());if(u.hostname.includes('youtu.be'))return u.pathname.slice(1).split('/')[0];if(u.hostname.includes('youtube.com')){if(u.pathname.startsWith('/shorts/'))return u.pathname.split('/')[2];if(u.pathname.startsWith('/embed/'))return u.pathname.split('/')[2];return u.searchParams.get('v')}}catch{}const m=v.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/);return m&&m[1]}
+    function setPane(name){state.source=name;$$('.tab').forEach(b=>{const on=b.dataset.tab===name;b.classList.toggle('active',on);b.setAttribute('aria-selected',on)});$('#youtubePane').classList.toggle('active',name==='youtube');$('#filePane').classList.toggle('active',name==='file');$('#analyzeFull').disabled=!state.file}
+    $$('.tab').forEach(b=>b.addEventListener('click',()=>setPane(b.dataset.tab)));
+    $('#loadYoutube').addEventListener('click',()=>{const id=getYoutubeId($('#youtubeUrl').value);if(!id){toast('這個 YouTube 網址無法辨識');return}state.source='youtube';els.mediaWrap.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?playsinline=1&rel=0" title="YouTube 音樂播放器" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;els.mediaWrap.classList.add('ready');setStatus('YouTube 已載入。請先按播放，建議選擇 30 或 60 秒連續跟拍。');$('#analyzeFull').disabled=true;beep(true)});
+    $('#youtubeUrl').addEventListener('keydown',e=>{if(e.key==='Enter')$('#loadYoutube').click()});
+    $('#fileInput').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(state.fileUrl)URL.revokeObjectURL(state.fileUrl);state.file=f;state.fileUrl=URL.createObjectURL(f);state.source='file';const isVideo=f.type.startsWith('video/');els.mediaWrap.innerHTML=isVideo?`<video controls playsinline src="${state.fileUrl}"></video>`:`<audio controls src="${state.fileUrl}"></audio>`;els.mediaWrap.classList.add('ready');state.media=els.mediaWrap.querySelector('audio,video');state.media.addEventListener('ended',()=>{if(state.tapMode==='full'&&els.overlay.classList.contains('show')&&state.taps.length>=4)finishTap()});$('#analyzeFull').disabled=false;setStatus(`已載入：${f.name}`);beep(true)});
+    function tempoLabel(b){if(b<70)return '舒緩慢速';if(b<90)return '穩定中慢速';if(b<110)return '輕快律動';if(b<130)return '活力快拍';return '快速挑戰'}
+    function setBpm(v,conf='手動確認',meta=null){v=Math.max(30,Math.min(240,Math.round(v*10)/10));if(meta)state.sampleMeta=meta;const m=state.sampleMeta||{};state.bpm=v;els.bpm.textContent=Number.isInteger(v)?v:v.toFixed(1);els.tempo.textContent=tempoLabel(v);els.beatSec.textContent=(60/v).toFixed(2)+' 秒';els.eightSec.textContent=(480/v).toFixed(1)+' 秒';els.sampleTaps.textContent=m.taps||'—';els.sampleTime.textContent=m.duration||'—';els.confidence.textContent=conf;els.empty.textContent='若動作速度感覺差一倍，可用下方「÷2」或「×2」校正；再播放 8 拍確認是否貼合音樂。';els.adjust.hidden=false;els.countBtn.disabled=false;switchMobileView('result',true)}
+    const tapLabels={8:['8 拍快速預估','按滿 8 拍會自動計算。這個結果適合快速參考。'],30:['30 秒連續跟拍','第一下會開始倒數。請跟著重拍持續按到時間結束。'],60:['60 秒連續跟拍','第一下會開始倒數。完整跟拍 1 分鐘可讓平均值更穩。'],full:['整首歌曲跟拍','從歌曲開始一路跟著重拍，歌曲結束後按「完成並計算」。']};
+    function openTap(mode){clearInterval(state.tapTick);state.tapMode=mode;state.taps=[];state.tapStart=null;const info=tapLabels[mode];els.tapTitle.textContent=info[0];els.tapIntro.textContent=info[1];els.tapCount.textContent='0 拍';els.tapClockLabel.textContent=mode==='full'?'已測量時間':mode==='8'?'測量進度':'剩餘時間';els.tapClock.textContent=mode==='full'?'0.0 秒':mode==='8'?'0 / 8 拍':mode+'.0 秒';els.tapProgress.textContent='準備好後，按第 1 拍';els.finishTap.hidden=mode!=='full';els.finishTap.disabled=true;els.overlay.classList.add('show');els.tapBtn.focus();beep(true)}
+    $$('[data-tap-mode]').forEach(b=>b.addEventListener('click',()=>openTap(b.dataset.tapMode)));
+    function closeTap(){els.overlay.classList.remove('show');clearInterval(state.tapTick);state.tapTick=null}
+    $('#closeTap').addEventListener('click',closeTap);
+    els.overlay.addEventListener('click',e=>{if(e.target===els.overlay)closeTap()});
+    function updateTapClock(){if(!state.tapStart)return;const elapsed=(performance.now()-state.tapStart)/1000;if(state.tapMode==='full'){els.tapClock.textContent=elapsed.toFixed(1)+' 秒';return}if(state.tapMode==='8')return;const remain=Math.max(0,Number(state.tapMode)-elapsed);els.tapClock.textContent=remain.toFixed(1)+' 秒';if(remain<=0)finishTap()}
+    function tap(){const now=performance.now();if(!state.tapStart){state.tapStart=now;state.tapTick=setInterval(updateTapClock,100)}state.taps.push(now);const n=state.taps.length;beep(n===1);els.tapBtn.classList.add('flash');setTimeout(()=>els.tapBtn.classList.remove('flash'),90);els.tapCount.textContent=n+' 拍';els.finishTap.disabled=n<4;if(state.tapMode==='8'){els.tapClock.textContent=n+' / 8 拍';els.tapProgress.textContent=n<8?`再按 ${8-n} 拍`:'完成 8 拍！';if(n===8)finishTap()}else{els.tapProgress.textContent=n===1?'計時開始，請繼續跟拍':`持續跟拍中：第 ${n} 拍`}}
+    function finishTap(){if(state.taps.length<4){toast('至少需要按 4 拍才能計算');return}clearInterval(state.tapTick);state.tapTick=null;const gaps=state.taps.slice(1).map((t,i)=>t-state.taps[i]);const sorted=[...gaps].sort((a,b)=>a-b),mid=Math.floor(sorted.length/2),median=sorted.length%2?sorted[mid]:(sorted[mid-1]+sorted[mid])/2;let valid=gaps.filter(g=>g>=median*.52&&g<=median*1.78);if(valid.length<3)valid=gaps;const avg=valid.reduce((a,b)=>a+b,0)/valid.length,duration=(state.taps.at(-1)-state.taps[0])/1000,bpm=60000/avg;let quality='快速預估';if(duration>=55)quality='高';else if(duration>=25)quality='穩定';else if(duration>=12)quality='中等';const modeName=state.tapMode==='full'?'整首跟拍':state.tapMode==='8'?'八拍快測':state.tapMode+' 秒跟拍';setBpm(bpm,quality,{taps:state.taps.length+' 拍',duration:duration.toFixed(1)+' 秒'});els.tapProgress.textContent='完成！正在顯示平均 BPM';setStatus(`${modeName}完成：使用 ${state.taps.length} 拍、${duration.toFixed(1)} 秒計算平均值。`);beep(true);setTimeout(closeTap,650)}
+    els.tapBtn.addEventListener('click',tap);
+    els.finishTap.addEventListener('click',finishTap);
+    addEventListener('keydown',e=>{if(e.code==='Space'&&els.overlay.classList.contains('show')){e.preventDefault();tap()}if(e.key==='Escape'&&els.overlay.classList.contains('show'))closeTap()});
+
+    function makeWorker(){const code=`self.onmessage=e=>{const a=e.data.samples,sr=e.data.sampleRate;try{const hop=Math.max(128,Math.round(sr/200)),n=Math.floor(a.length/hop),env=new Float32Array(n);for(let i=0;i<n;i++){let sum=0,st=i*hop,en=Math.min(a.length,st+hop);for(let j=st;j<en;j+=2){const x=a[j];sum+=x*x}env[i]=Math.sqrt(sum/Math.max(1,(en-st)/2));if(i%800===0)self.postMessage({p:15+Math.round(25*i/n)})}const flux=new Float32Array(n);let mean=0;for(let i=1;i<n;i++){flux[i]=Math.max(0,env[i]-env[i-1]);mean+=flux[i]}mean/=Math.max(1,n-1);for(let i=0;i<n;i++)flux[i]=Math.max(0,flux[i]-mean*.35);const er=sr/hop,minLag=Math.round(er*60/190),maxLag=Math.round(er*60/55),scores=[];for(let lag=minLag;lag<=maxLag;lag++){let s=0,c=0;for(let i=lag;i<n;i++){s+=flux[i]*flux[i-lag];c++}scores.push({lag,score:s/Math.max(1,c)});if(lag%12===0)self.postMessage({p:45+Math.round(45*(lag-minLag)/(maxLag-minLag))})}scores.sort((x,y)=>y.score-x.score);let best=scores[0],bpm=60*er/best.lag;while(bpm<72)bpm*=2;while(bpm>165)bpm/=2;const avg=scores.reduce((s,x)=>s+x.score,0)/scores.length,ratio=best.score/Math.max(1e-12,avg),confidence=Math.max(35,Math.min(96,Math.round(42+ratio*12)));self.postMessage({done:true,bpm,confidence})}catch(err){self.postMessage({error:err.message})}}`;return new Worker(URL.createObjectURL(new Blob([code],{type:'text/javascript'})))}
+    $('#analyzeFull').addEventListener('click',async()=>{if(!state.file)return;const btn=$('#analyzeFull');btn.disabled=true;els.progress.classList.add('show');els.progressBar.style.width='5%';setStatus('正在讀取影音聲音…');try{const buf=await state.file.arrayBuffer();els.progressBar.style.width='10%';const ac=ctx();if(ac.state==='suspended')await ac.resume();const decoded=await ac.decodeAudioData(buf.slice(0));els.progressBar.style.width='14%';setStatus('正在分析整首歌的重拍規律…');const analyzedSeconds=Math.min(decoded.duration,60*12),maxSamples=Math.min(decoded.length,decoded.sampleRate*60*12);const ch=decoded.getChannelData(0).slice(0,maxSamples);const worker=makeWorker();worker.onmessage=e=>{if(e.data.p)els.progressBar.style.width=e.data.p+'%';if(e.data.error){worker.terminate();finishError(e.data.error)}if(e.data.done){worker.terminate();els.progressBar.style.width='100%';setBpm(e.data.bpm,`${e.data.confidence}%`,{taps:'自動',duration:analyzedSeconds.toFixed(1)+' 秒'});setStatus('整首自動分析完成。建議再用 30 或 60 秒跟拍交叉確認。');setTimeout(()=>els.progress.classList.remove('show'),500);btn.disabled=false;beep(true)}};worker.postMessage({samples:ch,sampleRate:decoded.sampleRate},[ch.buffer])}catch(err){finishError(err.message)}function finishError(){els.progress.classList.remove('show');btn.disabled=false;setStatus('這個檔案的聲音格式無法自動分析，請改用 30 或 60 秒跟拍。');toast('無法讀取音訊，仍可使用手動跟拍')}});
+    function adjust(mult,add=0){if(!state.bpm)return;setBpm(state.bpm*mult+add,'手動校正');beep(true)}
+    $('#halfBtn').addEventListener('click',()=>adjust(.5));$('#doubleBtn').addEventListener('click',()=>adjust(2));$('#minusBtn').addEventListener('click',()=>adjust(1,-1));$('#plusBtn').addEventListener('click',()=>adjust(1,1));
+    function stopCount(){clearInterval(state.countTimer);state.countTimer=null;state.count=0;els.countBtn.textContent='▶ 播放 8 拍節拍';els.orb.textContent='♪';$$('.dot').forEach(d=>d.classList.remove('on'))}
+    function pulse(){state.count=state.count%8+1;els.orb.textContent=state.count;els.orb.classList.add('pulse');setTimeout(()=>els.orb.classList.remove('pulse'),100);$$('.dot').forEach((d,i)=>d.classList.toggle('on',i===state.count-1));beep(state.count===1)}
+    els.countBtn.addEventListener('click',()=>{if(state.countTimer){stopCount();return}if(!state.bpm)return;ctx().resume();pulse();state.countTimer=setInterval(pulse,60000/state.bpm);els.countBtn.textContent='■ 停止節拍'});
+    $('#soundBtn').addEventListener('click',e=>{state.sound=!state.sound;e.currentTarget.textContent=state.sound?'🔊 音效開':'🔇 音效關';if(state.sound)beep(true)});
+    $('#fullBtn').addEventListener('click',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen()}catch{toast('此裝置請使用瀏覽器的全螢幕功能')}});
+    let deferredInstall=null;const installBtn=$('#installBtn'),installOverlay=$('#installOverlay');
+    addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;installBtn.hidden=false});
+    installBtn.addEventListener('click',async()=>{if(deferredInstall){deferredInstall.prompt();const choice=await deferredInstall.userChoice;if(choice.outcome==='accepted')installBtn.hidden=true;deferredInstall=null;return}const isiOS=/iphone|ipad|ipod/i.test(navigator.userAgent);if(!isiOS)$('#installSteps').innerHTML='<li>打開瀏覽器右上角選單</li><li>選擇「安裝應用程式」或「加到主畫面」</li><li>確認安裝</li>';installOverlay.classList.add('show')});
+    $('#closeInstall').addEventListener('click',()=>installOverlay.classList.remove('show'));
+    installOverlay.addEventListener('click',e=>{if(e.target===installOverlay)installOverlay.classList.remove('show')});
+    addEventListener('appinstalled',()=>{installBtn.hidden=true;toast('月月節拍器已安裝到主畫面')});
+    if(matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)installBtn.hidden=true;
+    if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+    document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.countTimer)stopCount()});
+  })();
+  </script>
+</body>
+</html>
