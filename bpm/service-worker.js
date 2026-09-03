@@ -1,13 +1,14 @@
-const CACHE_NAME = "yueyue-beat-v8";
+const CACHE_NAME = "yueyue-beat-v9";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./icons/favicon-32.png",
-  "./icons/apple-touch-icon.png",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./icons/icon-512-maskable.png"
+  "./images/yueyue-listening.jpeg",
+  "./icons/yueyue-favicon-32.png",
+  "./icons/yueyue-apple-touch-icon.png",
+  "./icons/yueyue-icon-192.png",
+  "./icons/yueyue-icon-512.png",
+  "./icons/yueyue-icon-512-maskable.png"
 ];
 
 self.addEventListener("install", event => {

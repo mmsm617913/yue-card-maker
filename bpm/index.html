@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="月月節拍器" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/yueyue-favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/yueyue-apple-touch-icon.png" />
   <title>月月計算節拍器</title>
   <style>
     :root {
@@ -44,6 +44,11 @@
     .app-step.active{border-color:var(--coral);background:#fff0eb;color:var(--coral-dark)}
     .step-number{display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:var(--coral);color:white;font-size:.88rem}
     .step-icon{font-size:1.45rem;line-height:1}.step-text{text-align:left;line-height:1.2}
+    .mascot-guide{width:min(760px,100%);margin:0 auto 16px;display:grid;grid-template-columns:72px 1fr;align-items:center;gap:13px;border:2px solid #f0c6bd;border-radius:22px;background:linear-gradient(105deg,#fff 0,#fff8ef 100%);padding:8px 15px 8px 8px;color:var(--wine);text-align:left;cursor:pointer;box-shadow:0 7px 0 rgba(200,63,59,.11);position:relative}
+    .mascot-guide:after{content:"♪";position:absolute;right:13px;top:7px;color:var(--blue);font-size:1.1rem;transform:rotate(12deg)}
+    .mascot-guide img{width:72px;height:72px;border-radius:18px;object-fit:cover;object-position:center 20%;border:3px solid white;box-shadow:0 4px 12px rgba(111,47,59,.17)}
+    .mascot-copy{padding-right:19px;font-weight:900;line-height:1.42}.mascot-copy small{display:block;color:var(--coral-dark);font-size:.72rem;letter-spacing:.08em;margin-bottom:2px}.mascot-guide.bounce img{animation:mascotBounce .48s ease}
+    @keyframes mascotBounce{50%{transform:translateY(-6px) rotate(-3deg)}}
     .layout{display:grid;grid-template-columns:minmax(280px,.88fr) minmax(360px,1.35fr);gap:18px;align-items:start}
     .panel{background:rgba(255,253,247,.94);border:2px solid rgba(233,207,196,.9);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
     .panel-pad{padding:clamp(18px,2.5vw,28px)}
@@ -127,14 +132,14 @@
     .install-card h2{margin:0 0 8px;color:var(--wine);font-size:1.35rem}.install-card p{color:var(--muted);font-weight:700;line-height:1.55}.install-card ol{margin:12px 0 16px;padding-left:24px;color:var(--ink);font-weight:800;line-height:1.65}.install-card .primary{width:100%}
     .toast{position:fixed;left:50%;bottom:22px;z-index:30;transform:translate(-50%,120px);background:var(--wine);color:white;padding:12px 18px;border-radius:999px;font-weight:800;transition:transform .28s;box-shadow:var(--shadow)}.toast.show{transform:translate(-50%,0)}
     @media(max-width:820px){header{align-items:flex-start}.layout{grid-template-columns:1fr}.result{min-height:510px}}
-    @media(max-width:600px){body{min-width:320px}.shell{width:100%;max-width:480px;padding:8px 10px max(22px,env(safe-area-inset-bottom))}.creator-credit{font-size:.72rem;margin-top:12px}header{display:block;text-align:center;margin-bottom:10px}.brand{justify-content:center}.brand>div{min-width:0;text-align:left}.moon{width:52px;height:52px;border-radius:16px}h1{font-size:1.38rem;white-space:nowrap}.sub{font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top-actions{width:100%;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px;margin-top:11px}.mini{width:100%;padding:8px 4px;font-size:.75rem}.app-steps{position:sticky;top:6px;z-index:9;gap:6px;margin-bottom:10px;padding:6px;border-radius:18px;background:#f2ded5;box-shadow:0 6px 18px rgba(111,47,59,.11)}.app-step{display:flex;flex-direction:column;gap:3px;padding:7px 3px;border:0;border-radius:13px;box-shadow:none;font-size:.75rem}.app-step.active{box-shadow:0 3px 9px rgba(111,47,59,.1)}.step-number{width:24px;height:24px;font-size:.75rem}.step-icon{font-size:1.25rem}.step-text{text-align:center;white-space:nowrap}.workspace-view{display:none}.controls-panel.workspace-view.mobile-active{display:block}.result.workspace-view.mobile-active{display:flex}.step-panel{display:none}.step-panel.mobile-active{display:block}.layout{display:block}.panel{width:100%;border-radius:20px}.panel-pad{padding:15px}.source-tabs{margin-bottom:10px}.tab{padding:10px 5px}.media-wrap{margin-top:10px}.hint{font-size:.78rem;padding:8px 9px}.section-title{font-size:1.06rem;margin-bottom:10px}.mode-grid{grid-template-columns:1fr;margin-top:12px}.mode-card{padding:12px}.mode-card p{margin-bottom:9px}.tap-option{padding:9px 5px}.status{font-size:.82rem;margin-top:9px}.input-row{flex-direction:column;gap:7px}.input-row .primary{width:100%}.upload{min-height:100px;padding:12px}.result{padding:20px 13px;min-height:calc(100dvh - 238px)}.bpm{font-size:clamp(5rem,30vw,8.2rem)}.pace-picker{margin-top:14px}.pace-card{padding:12px 5px;border-radius:17px}.pace-card span{font-size:.82rem}.pace-card strong{font-size:1.55rem}.metrics{grid-template-columns:repeat(2,1fr);gap:5px;margin-top:15px}.metric{padding:9px 4px}.metric b{font-size:1rem}.beat-stage{padding-top:16px}.beat-orb{width:100px;height:100px;font-size:2.9rem}.dots{margin:14px 0 12px}}
+    @media(max-width:600px){body{min-width:320px}.shell{width:100%;max-width:480px;padding:8px 10px max(22px,env(safe-area-inset-bottom))}.creator-credit{font-size:.72rem;margin-top:12px}header{display:block;text-align:center;margin-bottom:10px}.brand{justify-content:center}.brand>div{min-width:0;text-align:left}.moon{width:52px;height:52px;border-radius:16px;object-position:center 18%}h1{font-size:1.38rem;white-space:nowrap}.sub{font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top-actions{width:100%;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px;margin-top:11px}.mini{width:100%;padding:8px 4px;font-size:.75rem}.app-steps{position:sticky;top:6px;z-index:9;gap:6px;margin-bottom:9px;padding:6px;border-radius:18px;background:#f2ded5;box-shadow:0 6px 18px rgba(111,47,59,.11)}.app-step{display:flex;flex-direction:column;gap:3px;padding:7px 3px;border:0;border-radius:13px;box-shadow:none;font-size:.75rem}.app-step.active{box-shadow:0 3px 9px rgba(111,47,59,.1)}.step-number{width:24px;height:24px;font-size:.75rem}.step-icon{font-size:1.25rem}.step-text{text-align:center;white-space:nowrap}.mascot-guide{grid-template-columns:58px 1fr;gap:10px;margin-bottom:10px;padding:6px 10px 6px 6px;border-radius:18px;box-shadow:0 4px 0 rgba(200,63,59,.1)}.mascot-guide img{width:58px;height:58px;border-radius:15px}.mascot-copy{font-size:.82rem;line-height:1.35}.mascot-copy small{font-size:.65rem}.workspace-view{display:none}.controls-panel.workspace-view.mobile-active{display:block}.result.workspace-view.mobile-active{display:flex}.step-panel{display:none}.step-panel.mobile-active{display:block}.layout{display:block}.panel{width:100%;border-radius:20px}.panel-pad{padding:15px}.source-tabs{margin-bottom:10px}.tab{padding:10px 5px}.media-wrap{margin-top:10px}.hint{font-size:.78rem;padding:8px 9px}.section-title{font-size:1.06rem;margin-bottom:10px}.mode-grid{grid-template-columns:1fr;margin-top:12px}.mode-card{padding:12px}.mode-card p{margin-bottom:9px}.tap-option{padding:9px 5px}.status{font-size:.82rem;margin-top:9px}.input-row{flex-direction:column;gap:7px}.input-row .primary{width:100%}.upload{min-height:100px;padding:12px}.result{padding:20px 13px;min-height:calc(100dvh - 238px)}.bpm{font-size:clamp(5rem,30vw,8.2rem)}.pace-picker{margin-top:14px}.pace-card{padding:12px 5px;border-radius:17px}.pace-card span{font-size:.82rem}.pace-card strong{font-size:1.55rem}.metrics{grid-template-columns:repeat(2,1fr);gap:5px;margin-top:15px}.metric{padding:9px 4px}.metric b{font-size:1rem}.beat-stage{padding-top:16px}.beat-orb{width:100px;height:100px;font-size:2.9rem}.dots{margin:14px 0 12px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
 <body>
   <main class="shell">
     <header>
-      <div class="brand"><img class="moon" src="icons/icon-192.png" alt="月亮與音符圖示"><div><h1>月月計算節拍器</h1><div class="sub">30 秒平均・60 秒精測・全曲跟拍</div></div></div>
+      <div class="brand"><img class="moon" src="images/yueyue-listening.jpeg" alt="戴耳機聽音樂的月月"><div><h1>月月計算節拍器</h1><div class="sub">30 秒平均・60 秒精測・全曲跟拍</div></div></div>
       <div class="top-actions"><button class="mini install-btn" id="installBtn" type="button">⬇ 安裝 App</button><button class="mini" id="soundBtn" type="button">🔊 音效開</button><button class="mini" id="fullBtn" type="button">⛶ 全螢幕</button></div>
     </header>
 
@@ -143,6 +148,11 @@
       <button class="app-step" data-app-step="2" type="button"><span class="step-number">2</span><span class="step-icon">👏</span><span class="step-text">選擇測速</span></button>
       <button class="app-step" data-app-step="3" type="button"><span class="step-number">3</span><span class="step-icon">📊</span><span class="step-text">查看結果</span></button>
     </nav>
+
+    <button class="mascot-guide" id="mascotGuide" type="button" aria-label="點一下聽月月的節拍小提醒">
+      <img src="images/yueyue-listening.jpeg" alt="戴耳機聽音樂的月月">
+      <span class="mascot-copy"><small>月月陪你一起聽 ♪</small><span id="mascotMessage">先放入歌曲，我們一起找出它的節拍吧！</span></span>
+    </button>
 
     <div class="layout">
       <section class="panel panel-pad controls-panel workspace-view mobile-active" aria-label="歌曲與測速設定">
@@ -209,7 +219,7 @@
     <div class="tap-box"><h2 id="tapTitle">30 秒連續跟拍</h2><p id="tapIntro">歌曲會先播放，聽到音樂後按第一拍，才開始倒數 30 秒。</p><div class="tap-live"><div><b id="tapCount">0 拍</b><span>目前按鍵</span></div><div><b id="tapClock">30.0 秒</b><span id="tapClockLabel">尚未開始</span></div></div><div class="tap-progress" id="tapProgress">先聽音樂，第一拍才開始計時</div><button class="music-retry" id="musicRetry" type="button">▶ 沒聽到音樂？按這裡重新播放</button><button class="tap-btn" id="tapBtn" type="button">跟著拍</button><button class="finish-tap" id="finishTap" type="button" hidden>完成並計算 BPM</button><p class="tap-help">電腦也可以按空白鍵。第一拍開始計時，之後跟著穩定重拍一路按。</p><button class="close" id="closeTap" type="button">取消並停止音樂</button></div>
   </div>
   <div class="install-overlay" id="installOverlay" role="dialog" aria-modal="true" aria-labelledby="installTitle">
-    <div class="install-card"><h2 id="installTitle">把月月節拍器放到主畫面</h2><p>安裝後會像一般 App 一樣顯示「月亮＋音符」圖示，開啟時不會出現瀏覽器工具列。</p><ol id="installSteps"><li>使用 Safari 開啟這個網站</li><li>按下方的「分享」按鈕</li><li>選擇「加入主畫面」</li><li>按右上角「新增」</li></ol><button class="primary" id="closeInstall" type="button">我知道了</button></div>
+    <div class="install-card"><h2 id="installTitle">把月月節拍器放到主畫面</h2><p>安裝後會以「戴耳機的月月」作為 App 圖示，開啟時不會出現瀏覽器工具列。</p><ol id="installSteps"><li>使用 Safari 開啟這個網站</li><li>按下方的「分享」按鈕</li><li>選擇「加入主畫面」</li><li>按右上角「新增」</li></ol><button class="primary" id="closeInstall" type="button">我知道了</button></div>
   </div>
   <div class="toast" id="toast" role="status"></div>
 
@@ -218,9 +228,13 @@
     const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
     const state={source:null,file:null,fileUrl:null,media:null,youtubePlayer:null,youtubeReady:false,bpm:null,stepBpm:null,sound:true,countTimer:null,count:0,taps:[],tapMode:'30',tapStart:null,tapTick:null,sampleMeta:null};
     const els={mediaWrap:$('#mediaWrap'),status:$('#status'),progress:$('#progress'),progressBar:$('#progressBar'),bpm:$('#bpmValue'),tempo:$('#tempoName'),beatSec:$('#beatSeconds'),eightSec:$('#eightSeconds'),sampleTaps:$('#sampleTaps'),sampleTime:$('#sampleTime'),confidence:$('#confidence'),pacePicker:$('#pacePicker'),everyBeatBpm:$('#everyBeatBpm'),halfBeatBpm:$('#halfBeatBpm'),empty:$('#emptyNote'),adjust:$('#adjust'),orb:$('#beatOrb'),countBtn:$('#countBtn'),overlay:$('#tapOverlay'),tapProgress:$('#tapProgress'),tapBtn:$('#tapBtn'),tapTitle:$('#tapTitle'),tapIntro:$('#tapIntro'),tapCount:$('#tapCount'),tapClock:$('#tapClock'),tapClockLabel:$('#tapClockLabel'),finishTap:$('#finishTap')};
-    function switchAppStep(step,scroll=false){step=String(step);$$('[data-app-step]').forEach(b=>b.classList.toggle('active',b.dataset.appStep===step));const mobile=matchMedia('(max-width:600px)').matches;$('.controls-panel').classList.toggle('mobile-active',step!=='3');$('.result').classList.toggle('mobile-active',step==='3');$$('.step-panel').forEach(p=>p.classList.toggle('mobile-active',p.dataset.stepPanel===step));if(scroll){if(mobile)scrollTo({top:0,behavior:'smooth'});else{const target=step==='3'?$('.result'):$(`.step-panel[data-step-panel="${step}"]`);target&&target.scrollIntoView({behavior:'smooth',block:'start'})}}}
+    const mascotMessages={1:'先放入歌曲，我們一起找出它的節拍吧！',2:'先聽到音樂，第一拍再開始按，我陪你慢慢來。',3:'找到節奏了！選一個最舒服的踩踏速度吧。'};
+    function setMascotMessage(step){$('#mascotMessage').textContent=mascotMessages[step]||mascotMessages[1]}
+    function switchAppStep(step,scroll=false){step=String(step);$$('[data-app-step]').forEach(b=>b.classList.toggle('active',b.dataset.appStep===step));setMascotMessage(step);const mobile=matchMedia('(max-width:600px)').matches;$('.controls-panel').classList.toggle('mobile-active',step!=='3');$('.result').classList.toggle('mobile-active',step==='3');$$('.step-panel').forEach(p=>p.classList.toggle('mobile-active',p.dataset.stepPanel===step));if(scroll){if(mobile)scrollTo({top:0,behavior:'smooth'});else{const target=step==='3'?$('.result'):$(`.step-panel[data-step-panel="${step}"]`);target&&target.scrollIntoView({behavior:'smooth',block:'start'})}}}
     $$('[data-app-step]').forEach(b=>b.addEventListener('click',()=>switchAppStep(b.dataset.appStep,true)));
     $$('[data-go-step]').forEach(b=>b.addEventListener('click',()=>switchAppStep(b.dataset.goStep,true)));
+    const mascotExtras=['重拍通常是你最自然想點頭或踏腳的那一下。','不用急，穩穩跟著音樂按，平均值會更準。','如果節奏太快，結果頁可以選「溫和隔拍踩」。'];let mascotExtra=0;
+    $('#mascotGuide').addEventListener('click',e=>{const b=e.currentTarget;b.classList.remove('bounce');void b.offsetWidth;b.classList.add('bounce');$('#mascotMessage').textContent=mascotExtras[mascotExtra++%mascotExtras.length];beep(true)});
     let audioCtx;
     function ctx(){return audioCtx||(audioCtx=new (window.AudioContext||window.webkitAudioContext)())}
     function beep(accent=false){if(!state.sound)return;const c=ctx(),o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=accent?690:470;g.gain.setValueAtTime(.001,c.currentTime);g.gain.exponentialRampToValueAtTime(accent ? .16 : .085,c.currentTime+.008);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.09);o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+.1)}
