@@ -1,4 +1,4 @@
-const CACHE_NAME = "yueyue-beat-v4";
+const CACHE_NAME = "yueyue-beat-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
