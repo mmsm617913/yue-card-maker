@@ -30,7 +30,8 @@
     button,input{font:inherit}
     button{touch-action:manipulation}
     .shell{width:min(1280px,100%);margin:auto;padding:20px clamp(16px,3vw,36px) 38px;position:relative}
-    header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px}
+    .creator-top{text-align:center;color:var(--wine);font-weight:1000;letter-spacing:.08em;margin:0 0 10px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:14px}
     .brand{display:flex;align-items:center;gap:14px}
     .moon{width:58px;height:58px;display:block;border-radius:19px;background:var(--yellow);box-shadow:0 7px 0 #e5a82e;transform:rotate(-4deg);object-fit:cover}
     h1{font-size:clamp(1.55rem,3vw,2.35rem);line-height:1.15;margin:0;color:var(--wine);letter-spacing:.02em}
@@ -38,9 +39,11 @@
     .top-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
     .mini{border:2px solid var(--line);background:var(--paper);color:var(--wine);border-radius:14px;padding:10px 14px;font-weight:800;cursor:pointer}
     .install-btn{border-color:var(--coral);background:var(--coral);color:white}
-    .mobile-nav{display:none;grid-template-columns:1fr 1fr;gap:7px;background:#f2ded5;padding:6px;border-radius:17px;margin-bottom:12px;position:sticky;top:8px;z-index:9;box-shadow:0 6px 18px rgba(111,47,59,.11)}
-    .mobile-nav button{border:0;border-radius:12px;padding:11px 8px;background:transparent;color:var(--muted);font-weight:900}
-    .mobile-nav button.active{background:var(--paper);color:var(--coral-dark);box-shadow:0 3px 9px rgba(111,47,59,.1)}
+    .app-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 16px;max-width:760px}
+    .app-step{min-width:0;display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:8px;border:2px solid var(--line);border-radius:19px;padding:10px 14px;background:var(--paper);color:var(--wine);font-weight:1000;cursor:pointer;box-shadow:0 5px 0 rgba(111,47,59,.12)}
+    .app-step.active{border-color:var(--coral);background:#fff0eb;color:var(--coral-dark)}
+    .step-number{display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:var(--coral);color:white;font-size:.88rem}
+    .step-icon{font-size:1.45rem;line-height:1}.step-text{text-align:left;line-height:1.2}
     .layout{display:grid;grid-template-columns:minmax(280px,.88fr) minmax(360px,1.35fr);gap:18px;align-items:start}
     .panel{background:rgba(255,253,247,.94);border:2px solid rgba(233,207,196,.9);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
     .panel-pad{padding:clamp(18px,2.5vw,28px)}
@@ -66,6 +69,8 @@
     .media-wrap.ready{display:block}
     .media-wrap iframe,.media-wrap video{display:block;width:100%;aspect-ratio:16/9;border:0;background:#251d1f}
     .media-wrap audio{display:block;width:100%;min-height:54px;background:#fff2ea}
+    .icon-action{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:13px;border:2px solid var(--coral);border-radius:16px;background:#fff0eb;color:var(--coral-dark);padding:12px;font-weight:1000;cursor:pointer;box-shadow:0 5px 0 rgba(200,63,59,.2)}
+    .icon-action span{font-size:1.25rem}
     .hint{display:flex;gap:9px;margin-top:12px;padding:11px 12px;border-radius:14px;background:#eaf7fc;color:#315b6a;font-size:.88rem;font-weight:700;line-height:1.5}
     .mode-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:11px;margin-top:18px}
     .mode-card{border:2px solid var(--line);border-radius:18px;padding:15px;background:white}
@@ -112,50 +117,59 @@
     .install-overlay.show{display:grid}
     .install-card{width:min(470px,100%);background:var(--paper);border-radius:27px;padding:23px;box-shadow:0 24px 70px rgba(0,0,0,.3)}
     .install-card h2{margin:0 0 8px;color:var(--wine);font-size:1.35rem}.install-card p{color:var(--muted);font-weight:700;line-height:1.55}.install-card ol{margin:12px 0 16px;padding-left:24px;color:var(--ink);font-weight:800;line-height:1.65}.install-card .primary{width:100%}
-    footer{text-align:center;color:#8d7372;font-weight:800;font-size:.85rem;margin-top:18px}
     .toast{position:fixed;left:50%;bottom:22px;z-index:30;transform:translate(-50%,120px);background:var(--wine);color:white;padding:12px 18px;border-radius:999px;font-weight:800;transition:transform .28s;box-shadow:var(--shadow)}.toast.show{transform:translate(-50%,0)}
     @media(max-width:820px){header{align-items:flex-start}.layout{grid-template-columns:1fr}.result{min-height:510px}}
-    @media(max-width:600px){body{min-width:320px}.shell{width:100%;max-width:480px;padding:10px 10px max(22px,env(safe-area-inset-bottom))}.mobile-nav{display:grid}.workspace-view{display:none}.workspace-view.mobile-active{display:flex}.panel-pad.workspace-view.mobile-active{display:block}.layout{display:block}.brand{min-width:0}.brand>div{min-width:0}h1{font-size:1.45rem;white-space:nowrap}.moon{width:48px;height:48px;border-radius:15px}.sub{font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top-actions{width:100%;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px}.mini{width:100%;padding:9px 5px;font-size:.78rem}.panel{width:100%;border-radius:20px}.panel-pad{padding:15px}.source-tabs{margin-bottom:10px}.tab{padding:10px 5px}.media-wrap{margin-top:10px}.hint{font-size:.78rem;padding:8px 9px}.section-title{font-size:1.06rem;margin-bottom:10px}.mode-grid{grid-template-columns:1fr;margin-top:12px}.mode-card{padding:12px}.mode-card p{margin-bottom:9px}.tap-option{padding:9px 5px}.status{font-size:.82rem;margin-top:9px}.input-row{flex-direction:column;gap:7px}.input-row .primary{width:100%}.upload{min-height:100px;padding:12px}.result{padding:20px 13px;min-height:calc(100dvh - 145px)}.bpm{font-size:clamp(5rem,30vw,8.2rem)}.metrics{grid-template-columns:repeat(2,1fr);gap:5px;margin-top:15px}.metric{padding:9px 4px}.metric b{font-size:1rem}.beat-stage{padding-top:16px}.beat-orb{width:100px;height:100px;font-size:2.9rem}.dots{margin:14px 0 12px}footer{font-size:.76rem;margin-top:12px}}
+    @media(max-width:600px){body{min-width:320px}.shell{width:100%;max-width:480px;padding:8px 10px max(22px,env(safe-area-inset-bottom))}.creator-top{font-size:.86rem;margin-bottom:7px}header{display:block;text-align:center;margin-bottom:10px}.brand{justify-content:center}.brand>div{min-width:0;text-align:left}.moon{width:52px;height:52px;border-radius:16px}h1{font-size:1.38rem;white-space:nowrap}.sub{font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top-actions{width:100%;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px;margin-top:11px}.mini{width:100%;padding:8px 4px;font-size:.75rem}.app-steps{position:sticky;top:6px;z-index:9;gap:6px;margin-bottom:10px;padding:6px;border-radius:18px;background:#f2ded5;box-shadow:0 6px 18px rgba(111,47,59,.11)}.app-step{display:flex;flex-direction:column;gap:3px;padding:7px 3px;border:0;border-radius:13px;box-shadow:none;font-size:.75rem}.app-step.active{box-shadow:0 3px 9px rgba(111,47,59,.1)}.step-number{width:24px;height:24px;font-size:.75rem}.step-icon{font-size:1.25rem}.step-text{text-align:center;white-space:nowrap}.workspace-view{display:none}.controls-panel.workspace-view.mobile-active{display:block}.result.workspace-view.mobile-active{display:flex}.step-panel{display:none}.step-panel.mobile-active{display:block}.layout{display:block}.panel{width:100%;border-radius:20px}.panel-pad{padding:15px}.source-tabs{margin-bottom:10px}.tab{padding:10px 5px}.media-wrap{margin-top:10px}.hint{font-size:.78rem;padding:8px 9px}.section-title{font-size:1.06rem;margin-bottom:10px}.mode-grid{grid-template-columns:1fr;margin-top:12px}.mode-card{padding:12px}.mode-card p{margin-bottom:9px}.tap-option{padding:9px 5px}.status{font-size:.82rem;margin-top:9px}.input-row{flex-direction:column;gap:7px}.input-row .primary{width:100%}.upload{min-height:100px;padding:12px}.result{padding:20px 13px;min-height:calc(100dvh - 238px)}.bpm{font-size:clamp(5rem,30vw,8.2rem)}.metrics{grid-template-columns:repeat(2,1fr);gap:5px;margin-top:15px}.metric{padding:9px 4px}.metric b{font-size:1rem}.beat-stage{padding-top:16px}.beat-orb{width:100px;height:100px;font-size:2.9rem}.dots{margin:14px 0 12px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
 <body>
   <main class="shell">
+    <div class="creator-top">設計者：月月🌙</div>
     <header>
       <div class="brand"><img class="moon" src="icons/icon-192.png" alt="月亮與音符圖示"><div><h1>月月計算節拍器</h1><div class="sub">30 秒平均・60 秒精測・全曲跟拍</div></div></div>
       <div class="top-actions"><button class="mini install-btn" id="installBtn" type="button">⬇ 安裝 App</button><button class="mini" id="soundBtn" type="button">🔊 音效開</button><button class="mini" id="fullBtn" type="button">⛶ 全螢幕</button></div>
     </header>
 
-    <nav class="mobile-nav" aria-label="手機操作分頁"><button class="active" data-mobile-view="measure" type="button">🎵 音樂與測量</button><button data-mobile-view="result" type="button">📊 BPM 結果</button></nav>
+    <nav class="app-steps" aria-label="BPM 計算三步驟">
+      <button class="app-step active" data-app-step="1" type="button"><span class="step-number">1</span><span class="step-icon">🎵</span><span class="step-text">放入歌曲</span></button>
+      <button class="app-step" data-app-step="2" type="button"><span class="step-number">2</span><span class="step-icon">👏</span><span class="step-text">選擇測速</span></button>
+      <button class="app-step" data-app-step="3" type="button"><span class="step-number">3</span><span class="step-icon">📊</span><span class="step-text">查看結果</span></button>
+    </nav>
 
     <div class="layout">
-      <section class="panel panel-pad workspace-view mobile-active" data-view="measure" aria-labelledby="sourceTitle">
-        <h2 class="section-title" id="sourceTitle"><span class="step">1</span>放入要測的音樂</h2>
-        <div class="source-tabs" role="tablist" aria-label="音樂來源">
-          <button class="tab active" data-tab="youtube" role="tab" aria-selected="true">▶ YouTube</button>
-          <button class="tab" data-tab="file" role="tab" aria-selected="false">⬆ 上傳影音</button>
+      <section class="panel panel-pad controls-panel workspace-view mobile-active" aria-label="歌曲與測速設定">
+        <div class="step-panel mobile-active" data-step-panel="1">
+          <h2 class="section-title" id="sourceTitle"><span class="step">1</span>放入要測的音樂</h2>
+          <div class="source-tabs" role="tablist" aria-label="音樂來源">
+            <button class="tab active" data-tab="youtube" role="tab" aria-selected="true">▶ YouTube</button>
+            <button class="tab" data-tab="file" role="tab" aria-selected="false">⬆ 上傳影音</button>
+          </div>
+          <div class="source-pane active" id="youtubePane">
+            <div class="input-row"><input class="url" id="youtubeUrl" inputmode="url" placeholder="貼上 YouTube 網址" aria-label="YouTube 網址"><button class="primary" id="loadYoutube" type="button">① 載入歌曲</button></div>
+            <div class="hint"><span>💡</span><span>YouTube 載入播放後，請在下一步跟著重拍連續按 30 或 60 秒。</span></div>
+          </div>
+          <div class="source-pane" id="filePane">
+            <label class="upload" for="fileInput">🎵 點這裡選擇音樂或影片<small>支援手機拍攝影片、MP3、M4A、WAV、MP4 等瀏覽器可播放格式</small></label>
+            <input id="fileInput" type="file" accept="audio/*,video/*">
+          </div>
+          <div class="media-wrap" id="mediaWrap" aria-live="polite"></div>
+          <button class="icon-action" data-go-step="2" type="button"><span>②</span>選擇測速方式</button>
         </div>
-        <div class="source-pane active" id="youtubePane">
-          <div class="input-row"><input class="url" id="youtubeUrl" inputmode="url" placeholder="貼上 YouTube 網址" aria-label="YouTube 網址"><button class="primary" id="loadYoutube" type="button">載入</button></div>
-          <div class="hint"><span>💡</span><span>YouTube 受平台保護，網頁不能直接擷取音訊；載入播放後，建議跟著重拍連續按 30 或 60 秒。</span></div>
-        </div>
-        <div class="source-pane" id="filePane">
-          <label class="upload" for="fileInput">🎵 點這裡選擇音樂或影片<small>支援手機拍攝影片、MP3、M4A、WAV、MP4 等瀏覽器可播放格式</small></label>
-          <input id="fileInput" type="file" accept="audio/*,video/*">
-        </div>
-        <div class="media-wrap" id="mediaWrap" aria-live="polite"></div>
 
-        <h2 class="section-title" style="margin-top:22px"><span class="step">2</span>選擇計算方式</h2>
-        <div class="mode-grid">
-          <article class="mode-card"><h3>👏 跟著節拍連續按</h3><p>測量越久，平均值越穩。30 秒是日常備課最實用的選擇。</p><div class="tap-options"><button class="tap-option" data-tap-mode="8" type="button">8 拍快測<small>粗略預估</small></button><button class="tap-option recommended" data-tap-mode="30" type="button">30 秒平均<small>推薦使用</small></button><button class="tap-option" data-tap-mode="60" type="button">60 秒精測<small>結果更穩</small></button><button class="tap-option" data-tap-mode="full" type="button">整首跟拍<small>手動結束</small></button></div></article>
-          <article class="mode-card"><h3>✨ 檔案自動分析</h3><p>只有自己上傳的影音可以自動聆聽整首歌。</p><button class="primary" id="analyzeFull" type="button" disabled>自動分析整首</button></article>
+        <div class="step-panel" data-step-panel="2">
+          <h2 class="section-title"><span class="step">2</span>選擇計算方式</h2>
+          <div class="mode-grid">
+            <article class="mode-card"><h3>👏 跟著節拍連續按</h3><p>測量越久，平均值越穩。建議選擇 30 秒或 60 秒。</p><div class="tap-options"><button class="tap-option" data-tap-mode="8" type="button">8 拍快測<small>粗略預估</small></button><button class="tap-option recommended" data-tap-mode="30" type="button">30 秒平均<small>推薦使用</small></button><button class="tap-option" data-tap-mode="60" type="button">60 秒精測<small>結果更穩</small></button><button class="tap-option" data-tap-mode="full" type="button">整首跟拍<small>手動結束</small></button></div></article>
+            <article class="mode-card"><h3>✨ 檔案自動分析</h3><p>自己上傳的影音可以自動聆聽整首歌。</p><button class="primary" id="analyzeFull" type="button" disabled>③ 自動分析整首</button></article>
+          </div>
+          <div class="status" id="status" aria-live="polite">請先載入 YouTube，或上傳一個影音檔。</div>
+          <div class="progress" id="progress" aria-hidden="true"><i id="progressBar"></i></div>
         </div>
-        <div class="status" id="status" aria-live="polite">請先載入 YouTube，或上傳一個影音檔。</div>
-        <div class="progress" id="progress" aria-hidden="true"><i id="progressBar"></i></div>
       </section>
 
-      <section class="panel result workspace-view" data-view="result" aria-labelledby="resultTitle">
-        <div class="result-label" id="resultTitle">目前測得速度</div>
+      <section class="panel result workspace-view" data-step-panel="3" aria-labelledby="resultTitle">
+        <div class="result-label" id="resultTitle">步驟 3・BPM 結果</div>
         <div class="bpm-row"><span class="bpm" id="bpmValue">—</span><span class="unit">BPM</span></div>
         <div class="tempo-name" id="tempoName">等待測量</div>
         <p class="empty-note" id="emptyNote">BPM 是「每分鐘幾拍」。建議至少跟拍 30 秒，拉長取樣時間會比只按前 8 拍更穩定。</p>
@@ -174,7 +188,6 @@
         </div>
       </section>
     </div>
-    <footer>設計者：月月🌙　｜　適合步步為營、樂齡律動與課堂音樂備課</footer>
   </main>
 
   <div class="tap-overlay" id="tapOverlay" role="dialog" aria-modal="true" aria-labelledby="tapTitle">
@@ -190,8 +203,9 @@
     const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
     const state={source:'youtube',file:null,fileUrl:null,media:null,bpm:null,sound:true,countTimer:null,count:0,taps:[],tapMode:'30',tapStart:null,tapTick:null,sampleMeta:null};
     const els={mediaWrap:$('#mediaWrap'),status:$('#status'),progress:$('#progress'),progressBar:$('#progressBar'),bpm:$('#bpmValue'),tempo:$('#tempoName'),beatSec:$('#beatSeconds'),eightSec:$('#eightSeconds'),sampleTaps:$('#sampleTaps'),sampleTime:$('#sampleTime'),confidence:$('#confidence'),empty:$('#emptyNote'),adjust:$('#adjust'),orb:$('#beatOrb'),countBtn:$('#countBtn'),overlay:$('#tapOverlay'),tapProgress:$('#tapProgress'),tapBtn:$('#tapBtn'),tapTitle:$('#tapTitle'),tapIntro:$('#tapIntro'),tapCount:$('#tapCount'),tapClock:$('#tapClock'),tapClockLabel:$('#tapClockLabel'),finishTap:$('#finishTap')};
-    function switchMobileView(view,scroll=false){$$('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view));$$('.workspace-view').forEach(p=>p.classList.toggle('mobile-active',p.dataset.view===view));if(scroll&&matchMedia('(max-width:600px)').matches)scrollTo({top:0,behavior:'smooth'})}
-    $$('[data-mobile-view]').forEach(b=>b.addEventListener('click',()=>switchMobileView(b.dataset.mobileView,true)));
+    function switchAppStep(step,scroll=false){step=String(step);$$('[data-app-step]').forEach(b=>b.classList.toggle('active',b.dataset.appStep===step));const mobile=matchMedia('(max-width:600px)').matches;$('.controls-panel').classList.toggle('mobile-active',step!=='3');$('.result').classList.toggle('mobile-active',step==='3');$$('.step-panel').forEach(p=>p.classList.toggle('mobile-active',p.dataset.stepPanel===step));if(scroll){if(mobile)scrollTo({top:0,behavior:'smooth'});else{const target=step==='3'?$('.result'):$(`.step-panel[data-step-panel="${step}"]`);target&&target.scrollIntoView({behavior:'smooth',block:'start'})}}}
+    $$('[data-app-step]').forEach(b=>b.addEventListener('click',()=>switchAppStep(b.dataset.appStep,true)));
+    $$('[data-go-step]').forEach(b=>b.addEventListener('click',()=>switchAppStep(b.dataset.goStep,true)));
     let audioCtx;
     function ctx(){return audioCtx||(audioCtx=new (window.AudioContext||window.webkitAudioContext)())}
     function beep(accent=false){if(!state.sound)return;const c=ctx(),o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=accent?690:470;g.gain.setValueAtTime(.001,c.currentTime);g.gain.exponentialRampToValueAtTime(accent ? .16 : .085,c.currentTime+.008);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.09);o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+.1)}
@@ -200,11 +214,11 @@
     function getYoutubeId(v){try{const u=new URL(v.trim());if(u.hostname.includes('youtu.be'))return u.pathname.slice(1).split('/')[0];if(u.hostname.includes('youtube.com')){if(u.pathname.startsWith('/shorts/'))return u.pathname.split('/')[2];if(u.pathname.startsWith('/embed/'))return u.pathname.split('/')[2];return u.searchParams.get('v')}}catch{}const m=v.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/);return m&&m[1]}
     function setPane(name){state.source=name;$$('.tab').forEach(b=>{const on=b.dataset.tab===name;b.classList.toggle('active',on);b.setAttribute('aria-selected',on)});$('#youtubePane').classList.toggle('active',name==='youtube');$('#filePane').classList.toggle('active',name==='file');$('#analyzeFull').disabled=!state.file}
     $$('.tab').forEach(b=>b.addEventListener('click',()=>setPane(b.dataset.tab)));
-    $('#loadYoutube').addEventListener('click',()=>{const id=getYoutubeId($('#youtubeUrl').value);if(!id){toast('這個 YouTube 網址無法辨識');return}state.source='youtube';els.mediaWrap.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?playsinline=1&rel=0" title="YouTube 音樂播放器" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;els.mediaWrap.classList.add('ready');setStatus('YouTube 已載入。請先按播放，建議選擇 30 或 60 秒連續跟拍。');$('#analyzeFull').disabled=true;beep(true)});
+    $('#loadYoutube').addEventListener('click',()=>{const id=getYoutubeId($('#youtubeUrl').value);if(!id){toast('這個 YouTube 網址無法辨識');return}state.source='youtube';els.mediaWrap.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?playsinline=1&rel=0" title="YouTube 音樂播放器" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;els.mediaWrap.classList.add('ready');setStatus('YouTube 已載入。請先按播放，再選擇 30 或 60 秒連續跟拍。');$('#analyzeFull').disabled=true;beep(true);switchAppStep('2',true)});
     $('#youtubeUrl').addEventListener('keydown',e=>{if(e.key==='Enter')$('#loadYoutube').click()});
-    $('#fileInput').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(state.fileUrl)URL.revokeObjectURL(state.fileUrl);state.file=f;state.fileUrl=URL.createObjectURL(f);state.source='file';const isVideo=f.type.startsWith('video/');els.mediaWrap.innerHTML=isVideo?`<video controls playsinline src="${state.fileUrl}"></video>`:`<audio controls src="${state.fileUrl}"></audio>`;els.mediaWrap.classList.add('ready');state.media=els.mediaWrap.querySelector('audio,video');state.media.addEventListener('ended',()=>{if(state.tapMode==='full'&&els.overlay.classList.contains('show')&&state.taps.length>=4)finishTap()});$('#analyzeFull').disabled=false;setStatus(`已載入：${f.name}`);beep(true)});
+    $('#fileInput').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(state.fileUrl)URL.revokeObjectURL(state.fileUrl);state.file=f;state.fileUrl=URL.createObjectURL(f);state.source='file';const isVideo=f.type.startsWith('video/');els.mediaWrap.innerHTML=isVideo?`<video controls playsinline src="${state.fileUrl}"></video>`:`<audio controls src="${state.fileUrl}"></audio>`;els.mediaWrap.classList.add('ready');state.media=els.mediaWrap.querySelector('audio,video');state.media.addEventListener('ended',()=>{if(state.tapMode==='full'&&els.overlay.classList.contains('show')&&state.taps.length>=4)finishTap()});$('#analyzeFull').disabled=false;setStatus(`已載入：${f.name}`);beep(true);switchAppStep('2',true)});
     function tempoLabel(b){if(b<70)return '舒緩慢速';if(b<90)return '穩定中慢速';if(b<110)return '輕快律動';if(b<130)return '活力快拍';return '快速挑戰'}
-    function setBpm(v,conf='手動確認',meta=null){v=Math.max(30,Math.min(240,Math.round(v*10)/10));if(meta)state.sampleMeta=meta;const m=state.sampleMeta||{};state.bpm=v;els.bpm.textContent=Number.isInteger(v)?v:v.toFixed(1);els.tempo.textContent=tempoLabel(v);els.beatSec.textContent=(60/v).toFixed(2)+' 秒';els.eightSec.textContent=(480/v).toFixed(1)+' 秒';els.sampleTaps.textContent=m.taps||'—';els.sampleTime.textContent=m.duration||'—';els.confidence.textContent=conf;els.empty.textContent='若動作速度感覺差一倍，可用下方「÷2」或「×2」校正；再播放 8 拍確認是否貼合音樂。';els.adjust.hidden=false;els.countBtn.disabled=false;switchMobileView('result',true)}
+    function setBpm(v,conf='手動確認',meta=null){v=Math.max(30,Math.min(240,Math.round(v*10)/10));if(meta)state.sampleMeta=meta;const m=state.sampleMeta||{};state.bpm=v;els.bpm.textContent=Number.isInteger(v)?v:v.toFixed(1);els.tempo.textContent=tempoLabel(v);els.beatSec.textContent=(60/v).toFixed(2)+' 秒';els.eightSec.textContent=(480/v).toFixed(1)+' 秒';els.sampleTaps.textContent=m.taps||'—';els.sampleTime.textContent=m.duration||'—';els.confidence.textContent=conf;els.empty.textContent='若動作速度感覺差一倍，可用下方「÷2」或「×2」校正；再播放 8 拍確認是否貼合音樂。';els.adjust.hidden=false;els.countBtn.disabled=false;switchAppStep('3',true)}
     const tapLabels={8:['8 拍快速預估','按滿 8 拍會自動計算。這個結果適合快速參考。'],30:['30 秒連續跟拍','第一下會開始倒數。請跟著重拍持續按到時間結束。'],60:['60 秒連續跟拍','第一下會開始倒數。完整跟拍 1 分鐘可讓平均值更穩。'],full:['整首歌曲跟拍','從歌曲開始一路跟著重拍，歌曲結束後按「完成並計算」。']};
     function openTap(mode){clearInterval(state.tapTick);state.tapMode=mode;state.taps=[];state.tapStart=null;const info=tapLabels[mode];els.tapTitle.textContent=info[0];els.tapIntro.textContent=info[1];els.tapCount.textContent='0 拍';els.tapClockLabel.textContent=mode==='full'?'已測量時間':mode==='8'?'測量進度':'剩餘時間';els.tapClock.textContent=mode==='full'?'0.0 秒':mode==='8'?'0 / 8 拍':mode+'.0 秒';els.tapProgress.textContent='準備好後，按第 1 拍';els.finishTap.hidden=mode!=='full';els.finishTap.disabled=true;els.overlay.classList.add('show');els.tapBtn.focus();beep(true)}
     $$('[data-tap-mode]').forEach(b=>b.addEventListener('click',()=>openTap(b.dataset.tapMode)));
