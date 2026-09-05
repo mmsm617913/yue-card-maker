@@ -2,7 +2,7 @@ const Q = window.YUE_QUESTIONS || [];
 const SUBJECT_NAMES = {PHY:"運動生理",AGE:"發展老化",PATH:"病理風險",PSY:"運動心理",SAFE:"急救安全",NUT:"營養體控",EXRX:"運動處方"};
 const STORE_KEY="yue_fit_quiz_state_v02";
 const ACTIVE_KEY="yue_fit_active_quiz_v02";
-const DATA_VERSION="2026-09-05-v06";
+const DATA_VERSION="2026-09-05-v07";
 const EMPTY_LEARNING={attempts:0,correct:0,wrong:0,streak:0,mastery:"未學習",lastSeen:null,nextReview:null,lapses:0};
 const defaultState={schema:2,dataVersion:DATA_VERSION,learning:{},favorites:{},settings:{sound:true},lastMode:null,currentSubject:"ALL"};
 function clone(x){return JSON.parse(JSON.stringify(x));}
