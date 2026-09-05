@@ -1,4 +1,4 @@
-# 月月體適能刷題 GitHub Pages 實機測試 v0.5
+# 月月體適能刷題 個人考試版 v0.6
 
 路徑：`/yue-card-maker/fitness-quiz-test/`
 

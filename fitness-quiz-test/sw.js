@@ -1,4 +1,4 @@
-const CACHE="yue-fit-test-v05-20260905";
+const CACHE="yue-fit-personal-v06-20260905";
 const ASSETS=["./", "./index.html", "./style.css", "./app.js", "./loader.js", "./manifest.webmanifest", "./data-01.js", "./data-02.js", "./data-03.js", "./data-04.js", "./data-05.js", "./data-06.js", "../icon-192.png", "../icon-512.png"];
 self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
 self.addEventListener("activate",e=>{e.waitUntil((async()=>{for(const k of await caches.keys())if(k!==CACHE)await caches.delete(k);await self.clients.claim()})())});
