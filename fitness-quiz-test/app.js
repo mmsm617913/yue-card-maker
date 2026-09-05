@@ -2,7 +2,7 @@ const Q = window.YUE_QUESTIONS || [];
 const SUBJECT_NAMES = {PHY:"運動生理",AGE:"發展老化",PATH:"病理風險",PSY:"運動心理",SAFE:"急救安全",NUT:"營養體控",EXRX:"運動處方"};
 const STORE_KEY="yue_fit_quiz_state_v02";
 const ACTIVE_KEY="yue_fit_active_quiz_v02";
-const DATA_VERSION="2026-09-05-v07";
+const DATA_VERSION="2026-09-05-v08";
 const EMPTY_LEARNING={attempts:0,correct:0,wrong:0,streak:0,mastery:"未學習",lastSeen:null,nextReview:null,lapses:0};
 const defaultState={schema:2,dataVersion:DATA_VERSION,learning:{},favorites:{},settings:{sound:true},lastMode:null,currentSubject:"ALL"};
 function clone(x){return JSON.parse(JSON.stringify(x));}
@@ -65,5 +65,5 @@ function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classL
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 function $(sel){return document.querySelector(sel)}
 window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);window.addEventListener("beforeunload",()=>{if(quiz&&!quiz.finished)persistQuiz()});document.addEventListener("visibilitychange",()=>{if(document.hidden&&quiz&&!quiz.finished)persistQuiz()});
-async function bootYueFitApp(){if(Q.length!==785){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{await navigator.serviceWorker.register("./sw.js")}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
+async function bootYueFitApp(){if(Q.length!==785){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260905-v08");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootYueFitApp,{once:true});else bootYueFitApp();

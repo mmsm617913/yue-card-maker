@@ -1,4 +1,4 @@
-# 月月體適能刷題 個人考試版 v0.7
+# 月月體適能刷題 個人考試版 v0.8
 
 路徑：`/yue-card-maker/fitness-quiz-test/`
 
