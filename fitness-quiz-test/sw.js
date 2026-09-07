@@ -1,6 +1,6 @@
-const BUILD="20260905-v08";
+const BUILD="20260907-v09";
 const CACHE=`yue-fit-personal-${BUILD}`;
-const ASSETS=["./", "./index.html", "./style.css", "./app.js", "./loader.js", "./manifest.webmanifest", "./data-01.js", "./data-02.js", "./data-03.js", "./data-04.js", "./data-05.js", "./data-06.js", "../icon-192.png", "../icon-512.png"];
+const ASSETS=["./", "./index.html", "./style.css", "./app.js", "./loader.js", "./learning-notes.js", "./manifest.webmanifest", "./data-01.js", "./data-02.js", "./data-03.js", "./data-04.js", "./data-05.js", "./data-06.js", "../icon-192.png", "../icon-512.png"];
 
 self.addEventListener("install",e=>{e.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
