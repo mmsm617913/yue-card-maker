@@ -1,8 +1,8 @@
-const CACHE = "yue-card-maker-v8-tv-sound-pages";
+const CACHE = "yue-card-maker-v9-projection-mode";
 const SCOPE = new URL(self.registration.scope).pathname.replace(/\/$/, "");
 const scoped = path => `${SCOPE}${path}`;
 const CORE = [
-  "/", "/games", "/manifest.webmanifest", "/favicon.svg", "/icon-192.png", "/icon-512.png",
+  "/", "/games", "/games/projection-mode.css", "/games/projection-mode.js", "/manifest.webmanifest", "/favicon.svg", "/icon-192.png", "/icon-512.png",
   "/balls/football.png", "/balls/shuttlecock.png", "/balls/bowling.png", "/balls/tennis.png", "/balls/golf.png", "/balls/basketball.png", "/balls/billiard.png", "/balls/baseball.png", "/balls/soccer.png",
   "/space/sun.png", "/space/mercury.png", "/space/venus.png", "/space/earth.png", "/space/moon.png", "/space/mars.png", "/space/jupiter.png", "/space/saturn.png", "/space/neptune.png",
   "/animals/dog.png", "/animals/cat.png", "/animals/rabbit.png", "/animals/elephant.png", "/animals/lion.png", "/animals/giraffe.png", "/animals/panda.png", "/animals/monkey.png", "/animals/cow.png",

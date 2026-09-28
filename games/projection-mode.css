@@ -1,0 +1,119 @@
+/* Scoped to this game; image colors and card dimensions are deliberately untouched. */
+.projection-toggle {
+  color: #f6eee0 !important;
+  background: #314750 !important;
+  border: 2px solid #516a6c !important;
+  min-height: 44px !important;
+  white-space: nowrap;
+}
+.projection-toggle[aria-pressed="true"] {
+  color: #142d32 !important;
+  background: #e7c676 !important;
+  border-color: #ab8745 !important;
+}
+.projection-toggle:focus-visible { outline: 3px solid #f6d378; outline-offset: 2px; }
+
+html.projection-mode [class*="games-module__"][class*="__page"] {
+  --ink: #f5ead5;
+  color: var(--ink);
+  background: #16232c;
+}
+html.projection-mode [class*="games-module__"][class*="__topbar"] {
+  background: #334451;
+  box-shadow: none;
+}
+html.projection-mode [class*="games-module__"][class*="__controls"] {
+  color: #f5ead5;
+  background: #24343d;
+  border-color: #52676d;
+  box-shadow: none;
+}
+html.projection-mode [class*="games-module__"][class*="__controls"] button:not(.projection-toggle),
+html.projection-mode [class*="games-module__"][class*="__controls"] select {
+  color: #f5ead5;
+  background: #344751;
+  border-color: #6c8587;
+}
+html.projection-mode [class*="games-module__"][class*="__newButton"],
+html.projection-mode [class*="games-module__"][class*="__soundButton"],
+html.projection-mode [class*="games-module__"][class*="__tvButton"] {
+  color: #f5ead5 !important;
+  background: #344751 !important;
+}
+html.projection-mode [class*="games-module__"][class*="__controls"] button[class*="__active"] {
+  color: #172c33;
+  background: #e7c676;
+  border-color: #e7c676;
+}
+html.projection-mode [class*="games-module__"][class*="__controls"] button[class*="__active"] small,
+html.projection-mode [class*="games-module__"][class*="__controls"] button[class*="__active"] b {
+  color: #172c33;
+}
+html.projection-mode [class*="games-module__"][class*="__controls"] button:not([class*="__active"]) small,
+html.projection-mode [class*="games-module__"][class*="__controls"] button:not([class*="__active"]) b {
+  color: #f0dcc0;
+}
+html.projection-mode [class*="games-module__"][class*="__segmented"] { background: #172b33; }
+html.projection-mode [class*="games-module__"][class*="__stage"] {
+  color: #f6edda;
+  background: #1e2c35;
+  border-color: #728d8d;
+  box-shadow: none;
+}
+html.projection-mode [class*="games-module__"][class*="__stage"]::before { display: none; }
+html.projection-mode [class*="games-module__"][class*="__stageHeader"],
+html.projection-mode [class*="games-module__"][class*="__actionBar"] { border-color: #5c7278; }
+html.projection-mode [class*="games-module__"][class*="__stageHeader"] p,
+html.projection-mode [class*="games-module__"][class*="__stageHeader"] h2,
+html.projection-mode [class*="games-module__"][class*="__actionBar"] p,
+html.projection-mode [class*="games-module__"][class*="__stage"] footer,
+html.projection-mode [class*="games-module__"][class*="__stage"] footer strong,
+html.projection-mode [class*="games-module__"][class*="__chainHint"] span,
+html.projection-mode [class*="games-module__"][class*="__chainHint"] strong {
+  color: #f6edda;
+}
+html.projection-mode [class*="games-module__"][class*="__stageHeader"] > strong,
+html.projection-mode [class*="games-module__"][class*="__round"] {
+  color: #172c33;
+  background: #e7c676;
+}
+html.projection-mode [class*="games-module__"][class*="__cell"],
+html.projection-mode [class*="games-module__"][class*="__chainCard"] {
+  background: #394852;
+  border-color: #809695;
+  box-shadow: none;
+}
+html.projection-mode [class*="games-module__"][class*="__changedCell"] {
+  border-color: #ffa96b;
+  box-shadow: 0 0 0 5px #d5b958;
+}
+html.projection-mode [class*="games-module__"][class*="__categoryGroup"] {
+  background: #2b3a43;
+  border-color: #738c8e;
+  box-shadow: none;
+}
+html.projection-mode [class*="games-module__"][class*="__categoryGroup"] h3 { color: #f6d78f; }
+html.projection-mode [class*="games-module__"][class*="__actionBar"] button {
+  color: #172c33;
+  background: #e7c676;
+}
+html.projection-mode [class*="games-module__"][class*="__actionBar"] button[class*="__secondary"] {
+  color: #f5ead5;
+  background: #344b55;
+  border-color: #9cb6b2;
+}
+html.projection-mode [class*="games-module__"][class*="__cover"] {
+  color: #f5ead5;
+  background: #455868;
+}
+html.projection-mode [class*="games-module__"][class*="__cover"] b {
+  color: #172c33;
+  background: #e7c676;
+}
+html.projection-mode [class*="games-module__"][class*="__curtain"] {
+  color: #f5ead5;
+  background: #324952f5;
+}
+@media (max-width: 680px) {
+  .projection-toggle { flex: 1; }
+}
