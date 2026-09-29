@@ -1,0 +1,41 @@
+.reading-toolbar{display:flex;justify-content:flex-end;margin-bottom:12px}
+.reading-toggle{border:1px solid #c7aaa4;border-radius:14px;padding:8px 14px;min-height:44px;background:#fff8ef;color:#593b3e;font-weight:700}
+button:focus-visible{outline:3px solid #438bba;outline-offset:3px}
+:root[data-theme="dark"]{color-scheme:dark;--cream:#15191f;--cream-2:#202630;--ink:#e9e5df;--muted:#b9b6b3;--card:#202630;--coral:#eea092;--coral-deep:#f5ad9e;--wine:#f0b2b9;--ok:#79cba4;--bad:#f3a0a0;--shadow:0 8px 24px rgba(0,0,0,.18)}
+[data-theme="dark"],[data-theme="dark"] body{background:#15191f}
+[data-theme="dark"] .hero{background:#242931;border-color:#635052}
+[data-theme="dark"] :is(.quiz-card,.result-card,.list-card,.stat,.icon-btn,.back){background:#202630;color:var(--ink);border-color:#424954}
+[data-theme="dark"] .reading-toggle{background:#272e39;color:var(--ink);border-color:#646b77}
+[data-theme="dark"] .mode.review{background:#3b2d30}
+[data-theme="dark"] .mode.core{background:#383328}
+[data-theme="dark"] .mode.learn{background:#24373c}
+[data-theme="dark"] .mode.exam{background:#342d40}
+[data-theme="dark"] .mode small{color:#c7c3bd}
+[data-theme="dark"] .chip{background:#242b35;color:var(--ink);border-color:#555d69}
+[data-theme="dark"] .chip.active{background:#6e424b;color:#fff0ed;border-color:#da9aa5}
+[data-theme="dark"] .bottom-nav{background:rgba(27,32,40,.97);border-color:#424954}
+[data-theme="dark"] .nav-btn{color:#b9b6b3}
+[data-theme="dark"] .nav-btn.active{color:var(--coral-deep)}
+[data-theme="dark"] .choice{background:#272e39;border-color:#58616f;color:var(--ink)}
+[data-theme="dark"] .choice.selected{background:#473239;border-color:#f0ae9f}
+[data-theme="dark"] .choice.correct{background:#203e33;border-color:#79cba4;color:#d5f1e3}
+[data-theme="dark"] .choice.wrong{background:#482d33;border-color:#f3a0a0;color:#ffe0df}
+[data-theme="dark"] .choice:disabled{opacity:1;-webkit-text-fill-color:currentColor}
+[data-theme="dark"] .feedback.ok{background:#203e33;color:#c8eddc}
+[data-theme="dark"] .feedback.bad{background:#482d33;color:#ffdbd8}
+[data-theme="dark"] .badge{background:#38404b;color:#dedbd6}
+[data-theme="dark"] .badge.hot{background:#473f26;color:#ecd897}
+[data-theme="dark"] .badge.core{background:#493137;color:#ffc1b3}
+[data-theme="dark"] .primary{background:#c77d70;color:#17191f}
+[data-theme="dark"] .secondary{background:#3b3037;color:#f0c2c6}
+[data-theme="dark"] .mini-submit{background:#70444e;color:#fff0ed}
+[data-theme="dark"] .notice,[data-theme="dark"] .timer{background:#393425;color:#e1d4a4}
+[data-theme="dark"] .notice button{background:#4a4433;color:#f3e7be;border:1px solid #9a8e6d;border-radius:10px}
+[data-theme="dark"] :is(.progress-line,.bar){background:#414652}
+[data-theme="dark"] .device-status{color:#b9b6b3}
+[data-theme="dark"] .device-status.online{color:#92d3b2}
+[data-theme="dark"] .device-status.offline{color:#f3aaa0}
+[data-theme="dark"] .danger-btn{background:#35272e;border-color:#ac737c;color:#f3b2b4}
+[data-theme="dark"] .install-ready{background:#203e33!important;color:#c8eddc!important}
+[data-theme="dark"] .toggle-row{border-color:#555d69}
+[data-theme="dark"] button:focus-visible{outline-color:#9ecff3}

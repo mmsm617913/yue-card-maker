@@ -7,13 +7,16 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="月月體適能">
-<link rel="manifest" href="manifest.webmanifest?v=20260929-v23">
+<link rel="manifest" href="manifest.webmanifest?v=20260929-v24">
 <link rel="apple-touch-icon" href="../icon-192.png">
 <title>月月｜初級國民體適能刷題</title>
-<link rel="stylesheet" href="style.css?v=20260929-v23">
+<script src="theme.js?v=20260929-v24"></script>
+<link rel="stylesheet" href="theme.css?v=20260929-v24">
+<link rel="stylesheet" href="style.css?v=20260929-v24">
 </head>
 <body>
 <div class="app">
+  <div class="reading-toolbar"><button id="readingTheme" class="reading-toggle" type="button" onclick="toggleReadingTheme()" aria-pressed="false">☾ 夜間讀題</button></div>
   <section id="home" class="screen">
     <div id="deviceStatus" class="device-status">● 連線中</div>
     <div class="topbar">
@@ -50,7 +53,7 @@
     <div id="subjectChips" class="subjects"></div>
 
     <div class="section-title">考前模擬</div>
-    <div class="list-card" onclick="startExam('exam100')"><h3>100題全庫模擬</h3><p>從821題練習庫（含官網爭議原題）依七科比例抽題。</p></div>
+    <div class="list-card" onclick="startExam('exam100')"><h3>100題全庫模擬</h3><p>從870題練習庫（含官網爭議原題）依七科比例抽題。</p></div>
     <div class="list-card" onclick="startExam('core100')"><h3>100題核心400衝刺</h3><p>只從核心400抽題，適合考前衝刺。</p></div>
     <div class="list-card" onclick="startExam('exam3block')"><h3>三段40分鐘考場演練</h3><p>依目前初級學科三段科目順序練習；100題總量仍是APP練習設定。</p></div>
     <div class="notice">50題／100題是 APP 練習模式，不宣稱為官方固定題數。</div>
@@ -101,7 +104,7 @@
     <div class="list-card"><h3>目前資料儲存方式</h3><p>v0.2 測試版先存在這台裝置的瀏覽器。不同裝置不會自動同步；清除Safari網站資料也可能刪除進度。</p></div>
     <button class="primary full" onclick="exportProgress()">匯出學習進度備份</button>
     <label class="secondary full file-label">匯入學習進度<input id="importFile" type="file" accept="application/json,.json" onchange="importProgress(event)"></label>
-    <div class="list-card"><h3>資料版本</h3><p id="versionInfo">題庫821 · 核心400 · 官網補練版v2.3</p></div>
+    <div class="list-card"><h3>資料版本</h3><p id="versionInfo">題庫870 · 核心400 · 官網補練版v2.4</p></div>
     <button class="danger-btn" onclick="resetProgress()">清除本機學習紀錄</button>
   </section>
 
@@ -114,15 +117,15 @@
   <button class="nav-btn" onclick="showStats()"><b>▥</b>進度</button>
 </nav>
 
-<script src="data-01.js?v=20260929-v23"></script>
-<script src="data-02.js?v=20260929-v23"></script>
-<script src="data-03.js?v=20260929-v23"></script>
-<script src="data-04.js?v=20260929-v23"></script>
-<script src="data-05.js?v=20260929-v23"></script>
-<script src="data-06.js?v=20260929-v23"></script>
-<script src="learning-notes.js?v=20260929-v23"></script>
-<script src="official-supplement.js?v=20260929-v23"></script>
-<script src="loader.js?v=20260929-v23"></script>
+<script src="data-01.js?v=20260929-v24"></script>
+<script src="data-02.js?v=20260929-v24"></script>
+<script src="data-03.js?v=20260929-v24"></script>
+<script src="data-04.js?v=20260929-v24"></script>
+<script src="data-05.js?v=20260929-v24"></script>
+<script src="data-06.js?v=20260929-v24"></script>
+<script src="learning-notes.js?v=20260929-v24"></script>
+<script src="official-supplement.js?v=20260929-v24"></script>
+<script src="loader.js?v=20260929-v24"></script>
 </body>
 </html>
 
