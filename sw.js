@@ -1,4 +1,4 @@
-const CACHE="yue-card-maker-v10-ipad-offline";
+const CACHE="yue-card-maker-v11-ipad-offline";
 const SCOPE=new URL(self.registration.scope).pathname.replace(/\/$/,"");
 const scoped=path=>`${SCOPE}${path}`;
 const PAGES=["/","/print/","/games/"];
