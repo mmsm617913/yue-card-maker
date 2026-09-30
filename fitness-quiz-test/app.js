@@ -2,7 +2,7 @@ const Q = window.YUE_QUESTIONS || [];
 const SUBJECT_NAMES = {PHY:"運動生理",AGE:"發展老化",PATH:"病理風險",PSY:"運動心理",SAFE:"急救安全",NUT:"營養體控",EXRX:"運動處方"};
 const STORE_KEY="yue_fit_quiz_state_v02";
 const ACTIVE_KEY="yue_fit_active_quiz_v02";
-const DATA_VERSION="2026-09-30-v33";
+const DATA_VERSION="2026-09-30-v34";
 const EMPTY_LEARNING={attempts:0,correct:0,wrong:0,streak:0,mastery:"未學習",lastSeen:null,nextReview:null,lapses:0};
 const defaultState={schema:2,dataVersion:DATA_VERSION,learning:{},favorites:{},settings:{sound:true},lastMode:null,currentSubject:"ALL"};
 function clone(x){return JSON.parse(JSON.stringify(x));}
@@ -75,12 +75,17 @@ function learningNote(q){
   return (window.YUE_LEARNING_NOTES||{})[q.uid]||null;
 }
 function noteHtml(q){
-  const note=learningNote(q);if(!note)return "";
+  const note=learningNote(q)||{};
   const generic=/這題是在找例外|先抓題幹的核心條件|先辨認考點，再比較四個選項|先圈起來再作答/;
   const why=String(note.why||"").trim(),memory=String(note.memory||"").trim();
   const parts=[];
-  if(why&&!generic.test(why))parts.push('<div><b>解析：</b>'+escapeHtml(why)+'</div>');
-  if(memory&&memory!==why&&!generic.test(memory))parts.push('<div class="memory-hook"><b>記憶：</b>'+escapeHtml(memory)+'</div>');
+  if(q.brief_explanation){
+    parts.push('<div><b>考點解析：</b>'+escapeHtml(q.brief_explanation)+'</div>');
+    (q.brief_explanation_sources||[]).filter(source=>/^https:\/\//.test(source.url)).forEach(source=>parts.push('<div><a target="_blank" rel="noopener noreferrer" href="'+escapeHtml(source.url)+'">參考：'+escapeHtml(source.title)+'</a></div>'));
+  }
+
+  if(why&&!generic.test(why)&&(!q.brief_explanation||q.exam_reference_only))parts.push('<div><b>解析：</b>'+escapeHtml(why)+'</div>');
+  if(memory&&memory!==why&&!generic.test(memory)&&(!q.brief_explanation||q.exam_reference_only))parts.push('<div class="memory-hook"><b>記憶：</b>'+escapeHtml(memory)+'</div>');
   if(Array.isArray(q.calculation_hint)){
     parts.push('<div><b>怎麼計算：</b></div>');
     q.calculation_hint.forEach(line=>parts.push('<p>'+escapeHtml(line)+'</p>'));
@@ -113,5 +118,5 @@ function showScreen(id){if(window.syncReadingControls)window.syncReadingControls
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 function $(sel){return document.querySelector(sel)}
 window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);window.addEventListener("beforeunload",()=>{if(quiz&&!quiz.finished)persistQuiz()});document.addEventListener("visibilitychange",()=>{if(document.hidden&&quiz&&!quiz.finished)persistQuiz()});
-async function bootYueFitApp(){if(Q.length!==894){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260930-v33");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
+async function bootYueFitApp(){if(Q.length!==902){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260930-v34");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootYueFitApp,{once:true});else bootYueFitApp();
