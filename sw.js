@@ -1,9 +1,9 @@
-const CACHE="yue-card-maker-v12-ipad-offline";
+const CACHE="yue-card-maker-v13-ipad-offline";
 const SCOPE=new URL(self.registration.scope).pathname.replace(/\/$/,"");
 const scoped=path=>`${SCOPE}${path}`;
 const PAGES=["/","/print/","/games/"];
 const STATIC=[
-"/games/projection-mode.css","/games/projection-mode.js","/manifest.webmanifest","/favicon.ico","/favicon-32.png","/apple-touch-icon.png","/icon-192.png","/icon-512.png",
+"/games/projection-mode.css?v=13","/games/projection-mode.js?v=13","/manifest.webmanifest?v=13","/favicon.ico?v=13","/favicon-32.png?v=13","/apple-touch-icon.png?v=13","/icon-192.png?v=13","/icon-512.png?v=13",
 "/balls/football.png","/balls/shuttlecock.png","/balls/bowling.png","/balls/tennis.png","/balls/golf.png","/balls/basketball.png","/balls/billiard.png","/balls/baseball.png","/balls/soccer.png",
 "/space/sun.png","/space/mercury.png","/space/venus.png","/space/earth.png","/space/moon.png","/space/mars.png","/space/jupiter.png","/space/saturn.png","/space/neptune.png",
 "/animals/dog.png","/animals/cat.png","/animals/rabbit.png","/animals/elephant.png","/animals/lion.png","/animals/giraffe.png","/animals/panda.png","/animals/monkey.png","/animals/cow.png",
