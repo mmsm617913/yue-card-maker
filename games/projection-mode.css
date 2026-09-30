@@ -1,119 +1,57 @@
-/* Scoped to this game; image colors and card dimensions are deliberately untouched. */
-.projection-toggle {
-  color: #f6eee0 !important;
-  background: #314750 !important;
-  border: 2px solid #516a6c !important;
-  min-height: 44px !important;
-  white-space: nowrap;
-}
-.projection-toggle[aria-pressed="true"] {
-  color: #142d32 !important;
-  background: #e7c676 !important;
-  border-color: #ab8745 !important;
-}
-.projection-toggle:focus-visible { outline: 3px solid #f6d378; outline-offset: 2px; }
+/* 月月顯示模式：只調整觀看與操作尺寸，不改題目、卡牌或遊戲狀態。 */
+.display-mode-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:5px;border-radius:16px;background:#fff7ee;border:1px solid #efd8d6}
+.display-mode-button{min-height:46px!important;padding:9px 14px!important;border:2px solid transparent!important;border-radius:13px!important;font-size:15px!important;font-weight:900!important;line-height:1.15!important;white-space:nowrap;box-shadow:0 4px 10px rgba(112,64,77,.09);transition:transform .16s ease,box-shadow .16s ease}
+.display-mode-button:active{transform:translateY(2px) scale(.98)}
+.display-mode-button:focus-visible{outline:4px solid #ffd06c;outline-offset:2px}
+.display-mode-button[data-mode="day"]{color:#704654!important;background:#fff0ad!important;border-color:#eec86a!important}
+.display-mode-button[data-mode="night"]{color:#f9efdc!important;background:#35454d!important;border-color:#60747a!important}
+.display-mode-button[data-mode="projector"]{color:#7f3149!important;background:#ffd7dc!important;border-color:#ec91a2!important}
+.display-mode-button[data-mode="tv"]{color:#fff!important;background:linear-gradient(135deg,#e46777,#817bd4)!important;border-color:#775fae!important}
+.display-mode-button[aria-pressed="true"]{box-shadow:0 0 0 4px #fff,0 0 0 7px #d9798f,0 8px 18px rgba(91,52,72,.22);transform:translateY(-1px)}
+[class*="games-module__"][class*="__tvButton"]{display:none!important}
+.display-mode-hint{position:fixed;z-index:99999;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);width:min(720px,92vw);padding:15px 20px;border-radius:18px;color:#fff;background:#603f53eF;box-shadow:0 14px 40px #2f1c2c55;text-align:center;font-weight:800;opacity:0;pointer-events:none;transition:.25s}
+.display-mode-hint.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-html.projection-mode [class*="games-module__"][class*="__page"] {
-  --ink: #f5ead5;
-  color: var(--ink);
-  background: #16232c;
-}
-html.projection-mode [class*="games-module__"][class*="__topbar"] {
-  background: #334451;
-  box-shadow: none;
-}
-html.projection-mode [class*="games-module__"][class*="__controls"] {
-  color: #f5ead5;
-  background: #24343d;
-  border-color: #52676d;
-  box-shadow: none;
-}
-html.projection-mode [class*="games-module__"][class*="__controls"] button:not(.projection-toggle),
-html.projection-mode [class*="games-module__"][class*="__controls"] select {
-  color: #f5ead5;
-  background: #344751;
-  border-color: #6c8587;
-}
-html.projection-mode [class*="games-module__"][class*="__newButton"],
-html.projection-mode [class*="games-module__"][class*="__soundButton"],
-html.projection-mode [class*="games-module__"][class*="__tvButton"] {
-  color: #f5ead5 !important;
-  background: #344751 !important;
-}
-html.projection-mode [class*="games-module__"][class*="__controls"] button[class*="__active"] {
-  color: #172c33;
-  background: #e7c676;
-  border-color: #e7c676;
-}
-html.projection-mode [class*="games-module__"][class*="__controls"] button[class*="__active"] small,
-html.projection-mode [class*="games-module__"][class*="__controls"] button[class*="__active"] b {
-  color: #172c33;
-}
-html.projection-mode [class*="games-module__"][class*="__controls"] button:not([class*="__active"]) small,
-html.projection-mode [class*="games-module__"][class*="__controls"] button:not([class*="__active"]) b {
-  color: #f0dcc0;
-}
-html.projection-mode [class*="games-module__"][class*="__segmented"] { background: #172b33; }
-html.projection-mode [class*="games-module__"][class*="__stage"] {
-  color: #f6edda;
-  background: #1e2c35;
-  border-color: #728d8d;
-  box-shadow: none;
-}
-html.projection-mode [class*="games-module__"][class*="__stage"]::before { display: none; }
-html.projection-mode [class*="games-module__"][class*="__stageHeader"],
-html.projection-mode [class*="games-module__"][class*="__actionBar"] { border-color: #5c7278; }
-html.projection-mode [class*="games-module__"][class*="__stageHeader"] p,
-html.projection-mode [class*="games-module__"][class*="__stageHeader"] h2,
-html.projection-mode [class*="games-module__"][class*="__actionBar"] p,
-html.projection-mode [class*="games-module__"][class*="__stage"] footer,
-html.projection-mode [class*="games-module__"][class*="__stage"] footer strong,
-html.projection-mode [class*="games-module__"][class*="__chainHint"] span,
-html.projection-mode [class*="games-module__"][class*="__chainHint"] strong {
-  color: #f6edda;
-}
-html.projection-mode [class*="games-module__"][class*="__stageHeader"] > strong,
-html.projection-mode [class*="games-module__"][class*="__round"] {
-  color: #172c33;
-  background: #e7c676;
-}
-html.projection-mode [class*="games-module__"][class*="__cell"],
-html.projection-mode [class*="games-module__"][class*="__chainCard"] {
-  background: #394852;
-  border-color: #809695;
-  box-shadow: none;
-}
-html.projection-mode [class*="games-module__"][class*="__changedCell"] {
-  border-color: #ffa96b;
-  box-shadow: 0 0 0 5px #d5b958;
-}
-html.projection-mode [class*="games-module__"][class*="__categoryGroup"] {
-  background: #2b3a43;
-  border-color: #738c8e;
-  box-shadow: none;
-}
-html.projection-mode [class*="games-module__"][class*="__categoryGroup"] h3 { color: #f6d78f; }
-html.projection-mode [class*="games-module__"][class*="__actionBar"] button {
-  color: #172c33;
-  background: #e7c676;
-}
-html.projection-mode [class*="games-module__"][class*="__actionBar"] button[class*="__secondary"] {
-  color: #f5ead5;
-  background: #344b55;
-  border-color: #9cb6b2;
-}
-html.projection-mode [class*="games-module__"][class*="__cover"] {
-  color: #f5ead5;
-  background: #455868;
-}
-html.projection-mode [class*="games-module__"][class*="__cover"] b {
-  color: #172c33;
-  background: #e7c676;
-}
-html.projection-mode [class*="games-module__"][class*="__curtain"] {
-  color: #f5ead5;
-  background: #324952f5;
-}
-@media (max-width: 680px) {
-  .projection-toggle { flex: 1; }
-}
+html.display-night [class*="games-module__"][class*="__page"]{--ink:#f7eedc;color:#f7eedc;background:#16242d}
+html.display-night [class*="games-module__"][class*="__topbar"]{background:#314550;box-shadow:none}
+html.display-night [class*="games-module__"][class*="__controls"]{color:#f7eedc;background:#24343d;border-color:#60767a;box-shadow:none}
+html.display-night [class*="games-module__"][class*="__controls"] button:not(.display-mode-button),html.display-night [class*="games-module__"][class*="__controls"] select{color:#f7eedc;background:#344851;border-color:#789092}
+html.display-night .display-mode-toolbar{background:#1b2b34;border-color:#526b70}
+html.display-night [class*="games-module__"][class*="__controls"] button[class*="__active"]{color:#172c33;background:#e8c778;border-color:#e8c778}
+html.display-night [class*="games-module__"][class*="__controls"] button[class*="__active"] small,html.display-night [class*="games-module__"][class*="__controls"] button[class*="__active"] b{color:#172c33}
+html.display-night [class*="games-module__"][class*="__controls"] button:not([class*="__active"]) small,html.display-night [class*="games-module__"][class*="__controls"] button:not([class*="__active"]) b{color:#f0dcc0}
+html.display-night [class*="games-module__"][class*="__segmented"]{background:#172b33}
+html.display-night [class*="games-module__"][class*="__stage"]{color:#f7eedc;background:#1e2d36;border-color:#7b9190;box-shadow:none}
+html.display-night [class*="games-module__"][class*="__stage"]::before{display:none}
+html.display-night [class*="games-module__"][class*="__stageHeader"],html.display-night [class*="games-module__"][class*="__actionBar"]{border-color:#60767b}
+html.display-night [class*="games-module__"][class*="__stageHeader"] p,html.display-night [class*="games-module__"][class*="__stageHeader"] h2,html.display-night [class*="games-module__"][class*="__actionBar"] p,html.display-night [class*="games-module__"][class*="__stage"] footer,html.display-night [class*="games-module__"][class*="__stage"] footer strong,html.display-night [class*="games-module__"][class*="__chainHint"] span,html.display-night [class*="games-module__"][class*="__chainHint"] strong{color:#f7eedc}
+html.display-night [class*="games-module__"][class*="__stageHeader"]>strong,html.display-night [class*="games-module__"][class*="__round"]{color:#172c33;background:#e8c778}
+html.display-night [class*="games-module__"][class*="__cell"],html.display-night [class*="games-module__"][class*="__chainCard"]{background:#394a54;border-color:#829795;box-shadow:none}
+html.display-night [class*="games-module__"][class*="__changedCell"]{border-color:#ffad70;box-shadow:0 0 0 5px #d8ba58}
+html.display-night [class*="games-module__"][class*="__categoryGroup"]{background:#2b3b44;border-color:#748d90;box-shadow:none}
+html.display-night [class*="games-module__"][class*="__categoryGroup"] h3{color:#f6d78f}
+html.display-night [class*="games-module__"][class*="__actionBar"] button{color:#172c33;background:#e8c778}
+html.display-night [class*="games-module__"][class*="__actionBar"] button[class*="__secondary"]{color:#f7eedc;background:#344c56;border-color:#9db7b3}
+html.display-night [class*="games-module__"][class*="__cover"]{color:#f7eedc;background:#455968}
+html.display-night [class*="games-module__"][class*="__cover"] b{color:#172c33;background:#e8c778}
+html.display-night [class*="games-module__"][class*="__curtain"]{color:#f7eedc;background:#324a53f2}
+
+html.display-projector [class*="games-module__"][class*="__page"],html.display-tv [class*="games-module__"][class*="__page"]{min-height:100dvh;padding:max(7px,1vw)!important}
+html.display-projector [class*="games-module__"][class*="__topbar"],html.display-tv [class*="games-module__"][class*="__topbar"]{display:none!important}
+html.display-projector [class*="games-module__"][class*="__controls"],html.display-tv [class*="games-module__"][class*="__controls"]{position:relative;z-index:5;margin:0 auto 8px!important;padding:8px!important;max-width:none!important;border-radius:16px!important}
+html.display-projector [class*="games-module__"][class*="__themeRow"],html.display-projector [class*="games-module__"][class*="__gameRow"],html.display-projector [class*="games-module__"][class*="__settingRow"],html.display-tv [class*="games-module__"][class*="__themeRow"],html.display-tv [class*="games-module__"][class*="__gameRow"],html.display-tv [class*="games-module__"][class*="__settingRow"]{gap:6px!important}
+html.display-projector [class*="games-module__"][class*="__controls"] button,html.display-projector [class*="games-module__"][class*="__controls"] select,html.display-tv [class*="games-module__"][class*="__controls"] button,html.display-tv [class*="games-module__"][class*="__controls"] select{min-height:42px!important}
+html.display-projector [class*="games-module__"][class*="__stage"],html.display-tv [class*="games-module__"][class*="__stage"]{width:100%!important;max-width:none!important;margin:0 auto!important;border-width:4px!important;border-radius:18px!important}
+html.display-projector [class*="games-module__"][class*="__stageHeader"],html.display-tv [class*="games-module__"][class*="__stageHeader"]{padding:10px 18px!important}
+html.display-projector [class*="games-module__"][class*="__stageHeader"] h2,html.display-tv [class*="games-module__"][class*="__stageHeader"] h2{font-size:clamp(30px,3.2vw,58px)!important;line-height:1.13!important}
+html.display-projector [class*="games-module__"][class*="__playArea"],html.display-tv [class*="games-module__"][class*="__playArea"]{min-height:0!important;padding:10px!important}
+html.display-projector [class*="games-module__"][class*="__board"]{width:min(62vw,62dvh)!important;max-width:760px!important}
+html.display-tv [class*="games-module__"][class*="__board"]{width:min(68vw,68dvh)!important;max-width:860px!important}
+html.display-tv [class*="games-module__"][class*="__stageHeader"] h2{font-size:clamp(34px,3.8vw,68px)!important}
+html.display-tv [class*="games-module__"][class*="__cell"] img{transform:scale(1.05)}
+html.display-tv .display-mode-toolbar,html.display-projector .display-mode-toolbar{background:#fffaf2}
+html.display-night.display-tv .display-mode-toolbar,html.display-night.display-projector .display-mode-toolbar{background:#1b2b34}
+
+@media(max-width:900px){.display-mode-toolbar{width:100%;justify-content:center}.display-mode-button{flex:1 1 130px}.display-mode-button{font-size:14px!important;padding:8px 9px!important}}
+@media(max-width:680px){.display-mode-button{flex:1 1 44%;min-height:48px!important}html.display-projector [class*="games-module__"][class*="__board"],html.display-tv [class*="games-module__"][class*="__board"]{width:min(92vw,60dvh)!important}}
+@media(display-mode:standalone){html.display-tv [class*="games-module__"][class*="__page"]{padding-top:max(7px,env(safe-area-inset-top))!important;padding-bottom:max(7px,env(safe-area-inset-bottom))!important}}

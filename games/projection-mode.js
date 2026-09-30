@@ -1,48 +1,13 @@
-/* Display-only enhancement for the published static game. No game state is changed. */
-(() => {
-  const storageKey = "yue-card-maker-projection-mode";
-  const modeClass = "projection-mode";
-  const rowSelector = '[class*="games-module__"][class*="__settingRow"]';
-  let enabled = false;
-
-  try {
-    enabled = localStorage.getItem(storageKey) === "on";
-  } catch (_) {
-    // Storage can be disabled in private browsing; the switch still works.
-  }
-
-  function render() {
-    document.documentElement.classList.toggle(modeClass, enabled);
-    document.querySelectorAll('[data-projection-toggle]').forEach(button => {
-      button.setAttribute("aria-pressed", String(enabled));
-      button.textContent = enabled ? "☾ 投影低亮度：開" : "☾ 投影低亮度：關";
-    });
-  }
-
-  function addControl() {
-    const row = document.querySelector(rowSelector);
-    if (!row || row.querySelector('[data-projection-toggle]')) return;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "projection-toggle";
-    button.dataset.projectionToggle = "";
-    button.setAttribute("aria-label", "切換投影低亮度高對比模式");
-    button.addEventListener("click", () => {
-      enabled = !enabled;
-      try { localStorage.setItem(storageKey, enabled ? "on" : "off"); } catch (_) {}
-      render();
-    });
-    row.append(button);
-    render();
-  }
-
-  render();
-  // Wait until the exported React page has loaded before extending its controls.
-  function start() {
-    addControl();
-    // Next.js can replace the control row during navigation.
-    new MutationObserver(addControl).observe(document.body, { childList: true, subtree: true });
-  }
-  if (document.readyState === "complete") start();
-  else window.addEventListener("load", start, { once: true });
-})();
+/* 月月顯示模式：日夜配色、投影與 HDMI 電視滿版。遊戲資料與規則不變。 */
+(()=>{const root=document.documentElement,rowSelector='[class*="games-module__"][class*="__settingRow"]',storageKey="yue-card-maker-color-mode";let colorMode="day",viewMode="";try{colorMode=localStorage.getItem(storageKey)==="night"?"night":"day"}catch(_){}
+const $all=s=>Array.from(document.querySelectorAll(s));
+function tone(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;try{const c=new C,o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.setValueAtTime(520,c.currentTime);o.frequency.exponentialRampToValueAtTime(720,c.currentTime+.06);g.gain.setValueAtTime(.001,c.currentTime);g.gain.exponentialRampToValueAtTime(.08,c.currentTime+.01);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.08);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.09);setTimeout(()=>c.close(),150)}catch(_){}}
+function theme(){root.classList.toggle("display-night",colorMode==="night");const meta=document.querySelector("[data-yue-theme-color]")||document.querySelector('meta[name="theme-color"]');if(meta)meta.content=colorMode==="night"?"#16242d":"#fff1c9";$all("[data-color-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.colorMode===colorMode)))}
+function view(){root.classList.toggle("display-projector",viewMode==="projector");root.classList.toggle("display-tv",viewMode==="tv");$all("[data-view-mode]").forEach(b=>{const on=b.dataset.viewMode===viewMode;b.setAttribute("aria-pressed",String(on));b.textContent=b.dataset.viewMode==="projector"?(on?"↙️ 離開投影放大":"📽️ 投影幕放大"):(on?"↙️ 離開電視放大":"📺 電視放大")})}
+function hint(msg){let el=document.querySelector(".display-mode-hint");if(!el){el=document.createElement("div");el.className="display-mode-hint";el.setAttribute("role","status");document.body.append(el)}el.textContent=msg;el.classList.add("show");clearTimeout(hint.t);hint.t=setTimeout(()=>el.classList.remove("show"),5200)}
+async function requestFull(){const el=document.documentElement;const fn=el.requestFullscreen||el.webkitRequestFullscreen;if(!fn){hint("iPad 請用 Safari 分享 → 加入主畫面，再從主畫面開啟，即可隱藏網址列並滿版顯示。");return false}try{await fn.call(el,{navigationUI:"hide"});try{await screen.orientation.lock("landscape")}catch(_){}return true}catch(_){hint("瀏覽器未允許原生全螢幕；已切換滿版簡報介面。iPad 可加入主畫面後再開啟。");return false}}
+async function setView(next){tone();if(viewMode===next){viewMode="";view();if(document.fullscreenElement&&document.exitFullscreen)try{await document.exitFullscreen()}catch(_){}return}viewMode=next;view();await requestFull()}
+function button(label,attrs,handler){const b=document.createElement("button");b.type="button";b.className="display-mode-button";b.textContent=label;Object.entries(attrs).forEach(([k,v])=>{b.dataset[k]=v});b.addEventListener("click",handler);return b}
+function addControls(){const row=document.querySelector(rowSelector);if(!row||row.querySelector("[data-display-toolbar]"))return;const wrap=document.createElement("div");wrap.className="display-mode-toolbar";wrap.dataset.displayToolbar="";wrap.setAttribute("role","group");wrap.setAttribute("aria-label","畫面顯示模式");wrap.append(button("☀️ 日間模式",{mode:"day",colorMode:"day"},()=>{tone();colorMode="day";try{localStorage.setItem(storageKey,colorMode)}catch(_){}theme()}),button("🌙 夜間模式",{mode:"night",colorMode:"night"},()=>{tone();colorMode="night";try{localStorage.setItem(storageKey,colorMode)}catch(_){}theme()}),button("📽️ 投影幕放大",{mode:"projector",viewMode:"projector"},()=>setView("projector")),button("📺 電視放大",{mode:"tv",viewMode:"tv"},()=>setView("tv")));row.append(wrap);theme();view()}
+let hadFullscreen=false;document.addEventListener("fullscreenchange",()=>{if(document.fullscreenElement)hadFullscreen=true;else if(hadFullscreen){hadFullscreen=false;viewMode="";view()}});
+theme();function start(){addControls();new MutationObserver(addControls).observe(document.body,{childList:true,subtree:true})}if(document.readyState==="complete")start();else window.addEventListener("load",start,{once:true})})();
