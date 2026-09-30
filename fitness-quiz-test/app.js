@@ -2,7 +2,7 @@ const Q = window.YUE_QUESTIONS || [];
 const SUBJECT_NAMES = {PHY:"運動生理",AGE:"發展老化",PATH:"病理風險",PSY:"運動心理",SAFE:"急救安全",NUT:"營養體控",EXRX:"運動處方"};
 const STORE_KEY="yue_fit_quiz_state_v02";
 const ACTIVE_KEY="yue_fit_active_quiz_v02";
-const DATA_VERSION="2026-09-30-v27";
+const DATA_VERSION="2026-09-30-v28";
 const EMPTY_LEARNING={attempts:0,correct:0,wrong:0,streak:0,mastery:"未學習",lastSeen:null,nextReview:null,lapses:0};
 const defaultState={schema:2,dataVersion:DATA_VERSION,learning:{},favorites:{},settings:{sound:true},lastMode:null,currentSubject:"ALL"};
 function clone(x){return JSON.parse(JSON.stringify(x));}
@@ -24,7 +24,36 @@ function persistQuiz(){try{if(quiz)localStorage.setItem(ACTIVE_KEY,JSON.stringif
 function restoreQuiz(){try{const raw=JSON.parse(localStorage.getItem(ACTIVE_KEY)||"null");if(!raw||!Array.isArray(raw.questions))return null;const by=Object.fromEntries(Q.map(q=>[q.uid,q]));const qs=raw.questions.map(u=>by[u]).filter(Boolean);if(!qs.length)return null;return {...raw,questions:qs}}catch(e){return null}}
 function clearQuiz(){quiz=null;try{localStorage.removeItem(ACTIVE_KEY)}catch(e){}clearInterval(timerInt);}
 function renderHome(){showScreen("home");renderHomeStatsOnly();renderSubjectChips();updateNetworkStatus();const saved=restoreQuiz();if(saved&&!saved.finished)showHomeNotice(`有一場尚未完成的${saved.kind==="exam"?"模擬考":"刷題"}（${saved.index+1}/${saved.questions.length}）。<button onclick="resumeQuiz()">繼續</button>`,"resume");}
-function renderHomeStatsOnly(){const vals=Object.values(state.learning),mastered=vals.filter(x=>x.mastery==="已熟悉").length,wrong=vals.filter(x=>x.mastery==="答錯待複習").length,touched=vals.filter(x=>x.attempts>0).length;const due=Q.filter(q=>{const s=getLearning(q.uid);return s.nextReview&&s.nextReview<=Date.now()}).length;if($("#mastered"))$("#mastered").textContent=mastered;if($("#wrongCount"))$("#wrongCount").textContent=wrong;if($("#dueCount"))$("#dueCount").textContent=due;if($("#coverage"))$("#coverage").textContent=`${touched} / ${Q.length}`;if($("#coverageFill"))$("#coverageFill").style.width=`${Math.round(touched/Q.length*100)}%`;}
+function progressScope(){return state.settings.progressScope==="official"?"official":"all";}
+function progressQuestions(scope=progressScope()){return scope==="official"?Q.filter(q=>q.official_mock_seen):Q;}
+function matchesProgress(q,kind){const s=getLearning(q.uid);if(kind==="due")return !!s.nextReview&&s.nextReview<=Date.now();if(kind==="wrong")return s.mastery==="答錯待複習";if(kind==="mastered")return s.mastery==="已熟悉";if(kind==="new")return !s.attempts;if(kind==="learning")return s.attempts>0&&!["答錯待複習","已熟悉"].includes(s.mastery);return true;}
+const PROGRESS_LABELS={due:"今日到期",wrong:"錯題待複習",mastered:"已熟悉",new:"未作答",learning:"學習中",all:"全部題目"};
+function setProgressScope(scope){state.settings.progressScope=scope==="official"?"official":"all";saveState();renderHomeStatsOnly();}
+function renderHomeStatsOnly(){
+ const qs=progressQuestions(),touched=qs.filter(q=>getLearning(q.uid).attempts>0).length;
+ for(const [id,kind] of [["mastered","mastered"],["wrongCount","wrong"],["dueCount","due"],["unseenCount","new"],["learningCount","learning"]])if($("#"+id))$("#"+id).textContent=qs.filter(q=>matchesProgress(q,kind)).length;
+ if($("#coverage"))$("#coverage").textContent=touched+" / "+qs.length;
+ if($("#coverageFill"))$("#coverageFill").style.width=(qs.length?Math.round(touched/qs.length*100):0)+"%";
+ if($("#coverageLabel"))$("#coverageLabel").textContent=progressScope()==="official"?"官網題覆蓋":"全題庫覆蓋";
+ for(const scope of ["all","official"]){const b=$("#scope-"+scope);if(b){b.classList.toggle("active",scope===progressScope());b.setAttribute("aria-pressed",String(scope===progressScope()));}}
+}
+function showProgressList(kind,scope=progressScope()){
+ const arr=progressQuestions(scope).filter(q=>matchesProgress(q,kind));
+ showScreen("list");$("#listTitle").textContent=(scope==="official"?"官網題 · ":"全題庫 · ")+PROGRESS_LABELS[kind]+"（"+arr.length+"題）";
+ $("#listBody").innerHTML=(arr.length?`<button class="primary full" onclick="startProgressPractice('${kind}','${scope}')">練習這一類（每回最多20題）</button>`:'<div class="notice">目前這一類沒有題目。</div>')+
+ arr.map(q=>{const s=getLearning(q.uid);return `<div class="list-card"><h3>${SUBJECT_NAMES[q.subject_code]}${q.official_mock_seen?' · 官網題':''} · ${s.mastery}</h3><p>${escapeHtml(q.stem)}</p><p>已答 ${s.attempts} 次 · 答對 ${s.correct} 次 · 連續答對 ${s.streak} 次</p><button class="secondary full" onclick="startOneQuestion('${q.uid}')">練習這題</button></div>`;}).join("");
+}
+function startProgressPractice(kind,scope){beginProgressPractice(progressQuestions(scope).filter(q=>matchesProgress(q,kind)),"progress_"+kind);}
+function startOfficialPractice(){beginProgressPractice(progressQuestions("official").filter(q=>!matchesProgress(q,"mastered")||matchesProgress(q,"due")),"official_priority");}
+function startOneQuestion(uid){beginProgressPractice(Q.filter(q=>q.uid===uid),"single");}
+function beginProgressPractice(qs,mode){
+ if(!qs.length){showScreen("list");$("#listTitle").textContent="練習完成";$("#listBody").innerHTML='<div class="notice">目前沒有符合條件的題目。官網題若已熟悉且尚未到期，可從「已熟悉」查看或自由複習。</div>';return;}
+ const saved=restoreQuiz();if(saved&&!saved.finished&&!confirm("開始新的練習會取代尚未完成的場次；已儲存的答題紀錄不會刪除。要繼續嗎？"))return;
+ const rank=q=>matchesProgress(q,"wrong")?0:matchesProgress(q,"due")?1:matchesProgress(q,"new")?2:3;
+ const selected=qs.slice().sort((a,b)=>rank(a)-rank(b)||questionScore(b)-questionScore(a)).slice(0,20);
+ clearInterval(timerInt);quiz={kind:"study",mode,questions:selected,index:0,answered:false,selected:null,correct:0,results:[],wrongUids:[],started:Date.now(),finished:false};state.lastMode=mode;saveState();persistQuiz();renderQuestion();
+}
+
 function renderSubjectChips(){const c=$("#subjectChips");c.innerHTML=`<button class="chip ${state.currentSubject==="ALL"?"active":""}" onclick="setSubject('ALL')">全部七科</button>`+Object.entries(SUBJECT_NAMES).map(([k,v])=>`<button class="chip ${state.currentSubject===k?"active":""}" onclick="setSubject('${k}')">${v}</button>`).join("");}
 function setSubject(code){state.currentSubject=code;saveState();renderSubjectChips();}
 function showHomeNotice(html,type=""){const n=$("#homeNotice");if(!n)return;n.className=`notice ${type||""}`;n.innerHTML=html;}
@@ -76,6 +105,5 @@ function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classL
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 function $(sel){return document.querySelector(sel)}
 window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);window.addEventListener("beforeunload",()=>{if(quiz&&!quiz.finished)persistQuiz()});document.addEventListener("visibilitychange",()=>{if(document.hidden&&quiz&&!quiz.finished)persistQuiz()});
-async function bootYueFitApp(){if(Q.length!==870){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260930-v27");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
+async function bootYueFitApp(){if(Q.length!==870){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260930-v28");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootYueFitApp,{once:true});else bootYueFitApp();
-

@@ -7,12 +7,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="月月體適能">
-<link rel="manifest" href="manifest.webmanifest?v=20260930-v27">
+<link rel="manifest" href="manifest.webmanifest?v=20260930-v28">
 <link rel="apple-touch-icon" href="../icon-192.png">
 <title>月月｜初級國民體適能刷題</title>
-<script src="theme.js?v=20260930-v27"></script>
-<link rel="stylesheet" href="theme.css?v=20260930-v27">
-<link rel="stylesheet" href="style.css?v=20260930-v27">
+<script src="theme.js?v=20260930-v28"></script>
+<link rel="stylesheet" href="theme.css?v=20260930-v28">
+<link rel="stylesheet" href="style.css?v=20260930-v28">
 </head>
 <body>
 <div class="app">
@@ -28,14 +28,17 @@
       <h1>今天先把最該記住的題目處理掉</h1>
       <p>870 題練習庫（含85題官網爭議原題） · 核心400 · 錯題複習 · 模擬考</p>
       <div class="progress-wrap">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><b>題庫覆蓋</b><span id="coverage">0 / 870</span></div>
+        <div class="progress-scope" role="group" aria-label="熟悉度統計範圍"><button id="scope-all" class="chip active" aria-pressed="true" onclick="setProgressScope('all')">全部題目</button><button id="scope-official" class="chip" aria-pressed="false" onclick="setProgressScope('official')">只看官網題</button></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><b id="coverageLabel">全題庫覆蓋</b><span id="coverage">0 / 870</span></div>
         <div class="progress-line"><div id="coverageFill" class="progress-fill"></div></div>
       </div>
       <div class="stats">
-        <div class="stat"><b id="dueCount">0</b><small>今日到期</small></div>
-        <div class="stat"><b id="wrongCount">0</b><small>錯題待複習</small></div>
-        <div class="stat"><b id="mastered">0</b><small>已熟悉</small></div>
+        <button class="stat progress-stat" onclick="showProgressList('due')"><b id="dueCount">0</b><small>今日到期</small><small class="stat-link">查看題目 ›</small></button>
+        <button class="stat progress-stat" onclick="showProgressList('wrong')"><b id="wrongCount">0</b><small>錯題待複習</small><small class="stat-link">查看題目 ›</small></button>
+        <button class="stat progress-stat" onclick="showProgressList('mastered')"><b id="mastered">0</b><small>已熟悉</small><small class="stat-link">查看題目 ›</small></button>
       </div>
+      <div class="progress-extra"><button class="secondary" onclick="showProgressList('new')">未作答 <b id="unseenCount">0</b></button><button class="secondary" onclick="showProgressList('learning')">學習中 <b id="learningCount">0</b></button></div>
+      <p class="progress-help">官網題與全庫共用作答紀錄。覆蓋率代表做過，不代表已熟悉；今日到期可能與其他類別重疊。</p>
     </div>
 
     <div id="homeNotice" class="notice hidden"></div>
@@ -47,8 +50,8 @@
       <button class="mode exam" onclick="startExam('exam50')"><span class="emoji">📝</span><strong>50題模擬</strong><small>70分為目前法規及格線</small></button>
     </div>
 
-    <button class="primary full" onclick="startStudy('official')">官網截圖補練262題</button>
-    <div class="notice">已補回85題官網原題，依截圖答案練習與計分；有爭議者保留提醒。補練按鈕一次列出262題，不受科目篩選限制。</div>
+    <button class="primary full" onclick="startOfficialPractice()">官網題智慧複習 · 每回最多20題</button><button class="secondary full" onclick="showProgressList('all','official')">查看全部官網題與熟悉度</button>
+    <div class="notice">官網題已納入今日複習、新題學習、錯題與熟悉度。智慧複習優先錯題、到期題及未作答題，跳過尚未到期的已熟悉題；不受科目篩選限制。爭議提醒與官網計分基準保留。</div>
     <div class="section-title">科目篩選</div>
     <div id="subjectChips" class="subjects"></div>
 
@@ -117,15 +120,14 @@
   <button class="nav-btn" onclick="showStats()"><b>▥</b>進度</button>
 </nav>
 
-<script src="data-01.js?v=20260930-v27"></script>
-<script src="data-02.js?v=20260930-v27"></script>
-<script src="data-03.js?v=20260930-v27"></script>
-<script src="data-04.js?v=20260930-v27"></script>
-<script src="data-05.js?v=20260930-v27"></script>
-<script src="data-06.js?v=20260930-v27"></script>
-<script src="learning-notes.js?v=20260930-v27"></script>
-<script src="official-supplement.js?v=20260930-v27"></script>
-<script src="loader.js?v=20260930-v27"></script>
+<script src="data-01.js?v=20260930-v28"></script>
+<script src="data-02.js?v=20260930-v28"></script>
+<script src="data-03.js?v=20260930-v28"></script>
+<script src="data-04.js?v=20260930-v28"></script>
+<script src="data-05.js?v=20260930-v28"></script>
+<script src="data-06.js?v=20260930-v28"></script>
+<script src="learning-notes.js?v=20260930-v28"></script>
+<script src="official-supplement.js?v=20260930-v28"></script>
+<script src="loader.js?v=20260930-v28"></script>
 </body>
 </html>
-

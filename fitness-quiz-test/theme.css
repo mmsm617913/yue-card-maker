@@ -39,3 +39,9 @@ button:focus-visible{outline:3px solid #438bba;outline-offset:3px}
 [data-theme="dark"] .install-ready{background:#203e33!important;color:#c8eddc!important}
 [data-theme="dark"] .toggle-row{border-color:#555d69}
 [data-theme="dark"] button:focus-visible{outline-color:#9ecff3}
+
+.progress-scope{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.progress-stat{color:var(--ink);font:inherit;cursor:pointer;min-width:0}
+.progress-stat small{display:block}.progress-stat .stat-link{font-size:11px;margin-top:5px;text-decoration:underline}
+.progress-extra{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.progress-extra button{flex:1}
+.hero .progress-help{font-size:12px;margin-top:10px;line-height:1.6}
