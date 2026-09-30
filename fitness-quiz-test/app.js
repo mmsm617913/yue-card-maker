@@ -2,7 +2,7 @@ const Q = window.YUE_QUESTIONS || [];
 const SUBJECT_NAMES = {PHY:"運動生理",AGE:"發展老化",PATH:"病理風險",PSY:"運動心理",SAFE:"急救安全",NUT:"營養體控",EXRX:"運動處方"};
 const STORE_KEY="yue_fit_quiz_state_v02";
 const ACTIVE_KEY="yue_fit_active_quiz_v02";
-const DATA_VERSION="2026-09-30-v28";
+const DATA_VERSION="2026-09-30-v29";
 const EMPTY_LEARNING={attempts:0,correct:0,wrong:0,streak:0,mastery:"未學習",lastSeen:null,nextReview:null,lapses:0};
 const defaultState={schema:2,dataVersion:DATA_VERSION,learning:{},favorites:{},settings:{sound:true},lastMode:null,currentSubject:"ALL"};
 function clone(x){return JSON.parse(JSON.stringify(x));}
@@ -101,9 +101,9 @@ function exportProgress(){const blob=new Blob([JSON.stringify({schema:2,dataVers
 function importProgress(ev){const file=ev.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const x=JSON.parse(reader.result);if(!x.state||x.state.schema!==2)throw new Error();state=x.state;saveState();if(x.activeQuiz)try{localStorage.setItem(ACTIVE_KEY,JSON.stringify(x.activeQuiz))}catch(e){}alert("學習進度已匯入");renderHome()}catch(e){alert("這個檔案不是相容的月月體適能進度備份")}};reader.readAsText(file);}
 function resetProgress(){if(confirm("確定要清除這台裝置的學習紀錄嗎？題庫本身不會刪除。")){state=clone(defaultState);saveState();try{localStorage.removeItem(ACTIVE_KEY)}catch(e){}renderHome();}}
 function updateNetworkStatus(){const el=$("#deviceStatus");if(!el)return;const on=navigator.onLine;el.textContent=on?"● 已連線 · 離線快取啟用":"● 離線模式";el.className=`device-status ${on?"online":"offline"}`;}
-function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.add("hidden"));const el=$("#"+id);if(el)el.classList.remove("hidden");const nav=document.querySelector(".bottom-nav");if(nav)nav.classList.toggle("hidden",id==="quiz");}
+function showScreen(id){if(window.syncReadingControls)window.syncReadingControls(id);document.querySelectorAll(".screen").forEach(x=>x.classList.add("hidden"));const el=$("#"+id);if(el)el.classList.remove("hidden");const nav=document.querySelector(".bottom-nav");if(nav)nav.classList.toggle("hidden",id==="quiz");}
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 function $(sel){return document.querySelector(sel)}
 window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);window.addEventListener("beforeunload",()=>{if(quiz&&!quiz.finished)persistQuiz()});document.addEventListener("visibilitychange",()=>{if(document.hidden&&quiz&&!quiz.finished)persistQuiz()});
-async function bootYueFitApp(){if(Q.length!==870){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260930-v28");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
+async function bootYueFitApp(){if(Q.length!==870){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260930-v29");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootYueFitApp,{once:true});else bootYueFitApp();
