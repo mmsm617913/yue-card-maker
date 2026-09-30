@@ -1,4 +1,4 @@
-const BUILD="20260930-v34";
+const BUILD="20260930-v35";
 const CACHE=`yue-fit-personal-${BUILD}`;
 const ASSETS=["./", "./index.html", "./style.css", "./theme.css", "./theme.js", "./app.js", "./loader.js", "./official-supplement.js", "./learning-notes.js", "./manifest.webmanifest", "./data-01.js", "./data-02.js", "./data-03.js", "./data-04.js", "./data-05.js", "./data-06.js", "../icon-192.png", "../icon-512.png"];
 
