@@ -1,4 +1,4 @@
-const CACHE="yue-card-maker-v13-ipad-offline";
+const CACHE="yue-card-maker-v14-animal-backgrounds";
 const SCOPE=new URL(self.registration.scope).pathname.replace(/\/$/,"");
 const scoped=path=>`${SCOPE}${path}`;
 const PAGES=["/","/print/","/games/"];
@@ -12,7 +12,7 @@ const STATIC=[
 "/hakka/hakka-rice-noodles.webp","/hakka/cabbage-pork-knuckle.webp","/hakka/stir-fried-water-snowflake.webp","/hakka/ginger-pork-intestine.webp","/hakka/pickled-mustard-tripe-soup.webp","/hakka/pickled-white-radish.webp","/hakka/red-bean-ice.webp","/hakka/brown-sugar-sweet-rice-cake.webp","/hakka/peanut-mochi.webp"
 ];
 async function tell(type,extra={}){const clients=await self.clients.matchAll({includeUncontrolled:true,type:"window"});clients.forEach(c=>c.postMessage({type,...extra}))}
-async function fetchAndStore(cache,url){try{const r=await fetch(url,{cache:"reload"});if(r.ok){await cache.put(url,r.clone());return r}return null}catch(_){return null}}
+async function fetchAndStore(cache,url){try{const requestUrl=/\/animals\/(?:elephant|giraffe|lion)\.png$/.test(url)?`${url}?v=14`:url;const r=await fetch(requestUrl,{cache:"reload"});if(r.ok){await cache.put(url,r.clone());return r}return null}catch(_){return null}}
 self.addEventListener("install",event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE),assets=new Set(STATIC.map(scoped)),pageHtml=[];let done=0,total=PAGES.length+assets.size;for(const path of PAGES){const url=scoped(path),r=await fetchAndStore(cache,url);done++;await tell("OFFLINE_PROGRESS",{percent:Math.round(done/total*100)});if(r){const html=await r.text();pageHtml.push(html);for(const m of html.matchAll(/(?:src|href)=["']([^"'#]+)["']/g)){const u=m[1];if(u.startsWith(SCOPE+"/"))assets.add(u)}}}total=PAGES.length+assets.size;for(const url of assets){await fetchAndStore(cache,url);done++;if(done%4===0||done===total)await tell("OFFLINE_PROGRESS",{percent:Math.min(99,Math.round(done/total*100))})}await self.skipWaiting()})));
 self.addEventListener("activate",event=>event.waitUntil((async()=>{const names=await caches.keys();await Promise.all(names.filter(n=>n!==CACHE).map(n=>caches.delete(n)));await self.clients.claim();await tell("OFFLINE_READY",{percent:100})})()));
 self.addEventListener("message",event=>{if(event.data&&event.data.type==="CHECK_OFFLINE_STATUS"&&event.source)event.source.postMessage({type:"OFFLINE_READY",percent:100})});
