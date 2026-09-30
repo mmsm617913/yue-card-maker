@@ -2,7 +2,7 @@ const Q = window.YUE_QUESTIONS || [];
 const SUBJECT_NAMES = {PHY:"運動生理",AGE:"發展老化",PATH:"病理風險",PSY:"運動心理",SAFE:"急救安全",NUT:"營養體控",EXRX:"運動處方"};
 const STORE_KEY="yue_fit_quiz_state_v02";
 const ACTIVE_KEY="yue_fit_active_quiz_v02";
-const DATA_VERSION="2026-09-30-v35";
+const DATA_VERSION="2026-09-30-v36";
 const EMPTY_LEARNING={attempts:0,correct:0,wrong:0,streak:0,mastery:"未學習",lastSeen:null,nextReview:null,lapses:0};
 const defaultState={schema:2,dataVersion:DATA_VERSION,learning:{},favorites:{},settings:{sound:true},lastMode:null,currentSubject:"ALL"};
 function clone(x){return JSON.parse(JSON.stringify(x));}
@@ -93,6 +93,8 @@ function noteHtml(q){
   }
   const energyTerms=/\bATP\b|\bPCr?\b|La\s*system|磷酸肌酸|乳酸系統/i.test([q.stem,...(q.choices||[])].join(" "));
   if(energyTerms)parts.push('<div class="memory-hook"><b>英文看懂：</b><p><b>ATP＝三磷酸腺苷（腺苷三磷酸）</b>：肌肉收縮可直接使用的能量分子。</p><p><b>PC＝磷酸肌酸</b>，也寫作PCr：把磷酸基交給ADP，快速補成ATP。</p><p><b>ATP-PC＝三磷酸腺苷－磷酸肌酸系統</b>，又稱磷酸原系統：供能快、儲量有限，短時間爆發用得多。</p><p><b>La system＝乳酸系統</b>：考題中的傳統名稱，通常指無氧糖解供能；以葡萄糖或肝醣經糖解快速再生ATP，不是直接把乳酸當成這個系統的燃料。</p><p>記法：ATP直接用、PC快速補；ATP-PC短爆發、La糖解接力。這是幫助記憶的比喻，各系統實際上同時參與。</p><a target="_blank" rel="noopener noreferrer" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3005844/">參考：肌肉能量系統</a> · <a target="_blank" rel="noopener noreferrer" href="https://scitechvista.nat.gov.tw/Article/C000008/detail?ID=1b34a275-284c-4635-8711-c86373785f04">中文名詞來源</a></div>');
+  const trainingComparison=/肌耐力|肌力.*(處方|強度|次數)|有氧.*(訓練|強度|時間)|心肺訓練/.test(q.stem||"");
+  if(trainingComparison)parts.push('<div class="memory-hook"><b>肌力、肌耐力、有氧怎麼分？</b><p><b>肌力＝能舉多重</b>：這類考題常配「高強度、低次數」，指較重的阻力、每組反覆較少次。</p><p><b>肌耐力＝能反覆幾下</b>：這類考題常配「低強度、高次數」，指較輕的阻力、每組反覆較多次；不是一週要運動很多次。</p><p><b>有氧＝心肺能持續工作多久</b>：用強度、持續時間、每週頻率安排，不直接套成「低強度高次數」。例如快走30分鐘是有氧；較輕啞鈴反覆舉15下是在練局部肌耐力。</p><p>有氧也能有較高強度；中等強度通常能說話、不能唱歌。題目問有氧時，先看它問的是心跳率、分鐘數，還是每週幾次。</p><p><b>記法：肌力看多重、肌耐力看幾下、有氧看多喘多久。</b>這是考題辨識方式，實際訓練效益會重疊，並非唯一有效配方。</p><a target="_blank" rel="noopener noreferrer" href="https://pubmed.ncbi.nlm.nih.gov/11828249/">ACSM：傳統阻力訓練分類</a> · <a target="_blank" rel="noopener noreferrer" href="https://pubmed.ncbi.nlm.nih.gov/41843416/">ACSM：2026更新</a> · <a target="_blank" rel="noopener noreferrer" href="https://www.cdc.gov/physical-activity-basics/measuring/index.html">CDC：有氧強度</a></div>');
   if(!parts.length)return "";
   return '<details class="answer-details"><summary>'+(q.calculation_hint?'查看計算提示與官網答案提醒':q.exam_reference_only?'官網答案有爭議註記 · 查看提醒':'查看本題解析與記憶')+'</summary><div class="answer-note">'+parts.join("")+'</div></details>';
 }
@@ -120,5 +122,5 @@ function showScreen(id){if(window.syncReadingControls)window.syncReadingControls
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 function $(sel){return document.querySelector(sel)}
 window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);window.addEventListener("beforeunload",()=>{if(quiz&&!quiz.finished)persistQuiz()});document.addEventListener("visibilitychange",()=>{if(document.hidden&&quiz&&!quiz.finished)persistQuiz()});
-async function bootYueFitApp(){if(Q.length!==904){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260930-v35");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
+async function bootYueFitApp(){if(Q.length!==909){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20260930-v36");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootYueFitApp,{once:true});else bootYueFitApp();
