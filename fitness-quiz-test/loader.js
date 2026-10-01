@@ -13,8 +13,8 @@
       if(byUid.has(q.uid)){Object.assign(byUid.get(q.uid),{official_mock_seen:q.official_mock_seen,...(q.brief_explanation?{brief_explanation:q.brief_explanation,brief_explanation_sources:q.brief_explanation_sources}:{})});if(q.screenshot_answer_index){Object.assign(byUid.get(q.uid),{official_answer_index:q.screenshot_answer_index,official_answer_text:q.official_answer_text,original_answer_index:q.original_answer_index,original_answer_text:q.original_answer_text,exam_reference_only:true,review_warning:q.review_warning});}if(q.screenshot_choices){byUid.get(q.uid).choices=q.screenshot_choices.slice();byUid.get(q.uid).screenshot_correction=q.screenshot_correction;}}
       else {window.YUE_QUESTIONS.push(q);byUid.set(q.uid,q);}
     }
-    if(window.YUE_QUESTIONS.length!==909||byUid.size!==909)throw new Error("補練題庫驗證失敗");
+    if(window.YUE_QUESTIONS.length!==917||byUid.size!==917)throw new Error("補練題庫驗證失敗");
     window.YUE_QB64=[];
-    const s=document.createElement("script");s.src="app.js?v=20260930-v38";s.defer=false;document.body.appendChild(s);
+    const s=document.createElement("script");s.src="app.js?v=20261001-v39";s.defer=false;document.body.appendChild(s);
   }catch(e){console.error(e);document.body.innerHTML=`<div style="padding:28px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.6"><h2>題庫載入失敗</h2><p>${String(e.message||e)}</p><p>請先連網重新整理；若仍失敗，請更新 Safari / Chrome。</p></div>`;}
 })();
