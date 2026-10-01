@@ -1,4 +1,4 @@
-const CACHE="yue-card-maker-v15-print-animal-backgrounds";
+const CACHE="yue-card-maker-v16-image-fullbleed";
 const SCOPE=new URL(self.registration.scope).pathname.replace(/\/$/,"");
 const scoped=path=>`${SCOPE}${path}`;
 const PAGES=["/","/print/","/games/"];
@@ -9,7 +9,7 @@ const STATIC=[
 "/animals/dog.png","/animals/cat.png","/animals/rabbit.png","/animals/elephant-cream-v2.png","/animals/lion-cream-v2.png","/animals/giraffe-cream-v2.png","/animals/panda.png","/animals/monkey.png","/animals/cow.png",
 "/animals-v2/eagle.webp","/animals-v2/parrot.webp","/animals-v2/butterfly.webp","/animals-v2/dolphin.webp","/animals-v2/sea-turtle.webp","/animals-v2/clownfish.webp",
 "/space-v2/sun.webp","/space-v2/earth.webp","/space-v2/moon.webp","/space-v2/mercury.webp","/space-v2/venus.webp","/space-v2/mars.webp","/space-v2/jupiter.webp","/space-v2/saturn.webp","/space-v2/neptune.webp",
-"/hakka/hakka-rice-noodles.webp","/hakka/cabbage-pork-knuckle.webp","/hakka/stir-fried-water-snowflake.webp","/hakka/ginger-pork-intestine.webp","/hakka/pickled-mustard-tripe-soup.webp","/hakka/pickled-white-radish.webp","/hakka/red-bean-ice.webp","/hakka/brown-sugar-sweet-rice-cake.webp","/hakka/peanut-mochi.webp"
+"/hakka/hakka-rice-noodles.webp","/hakka/cabbage-pork-knuckle.webp","/hakka/stir-fried-water-snowflake.webp","/hakka/ginger-pork-intestine.webp","/hakka/pickled-mustard-tripe-soup.webp","/hakka/pickled-white-radish.webp","/hakka/red-bean-ice.webp","/hakka/brown-sugar-sweet-rice-cake.webp","/hakka/peanut-mochi.webp","/print/card-image-fullbleed-v16.css"
 ];
 async function tell(type,extra={}){const clients=await self.clients.matchAll({includeUncontrolled:true,type:"window"});clients.forEach(c=>c.postMessage({type,...extra}))}
 async function fetchAndStore(cache,url){try{const r=await fetch(url,{cache:"reload"});if(r.ok){await cache.put(url,r.clone());return r}return null}catch(_){return null}}

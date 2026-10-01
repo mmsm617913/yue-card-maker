@@ -1,0 +1,32 @@
+/* Print V16: extend every square image background to the coloured frame. */
+.physical-card > .ball-image,
+.mini-physical-card .ball-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: 50% 50% !important;
+  transform: none !important;
+}
+
+.question-cell {
+  padding: 0 !important;
+}
+
+.question-cell .ball-image,
+.a5-question .question-cell .ball-image,
+.mini-question-pair .question-cell .ball-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: 50% 50% !important;
+  transform: none !important;
+}
+
+@media print {
+  .physical-card > .ball-image,
+  .question-cell .ball-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+}
