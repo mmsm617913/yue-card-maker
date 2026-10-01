@@ -1,4 +1,4 @@
-const CACHE="yue-card-maker-v14-animal-backgrounds";
+const CACHE="yue-card-maker-v15-print-animal-backgrounds";
 const SCOPE=new URL(self.registration.scope).pathname.replace(/\/$/,"");
 const scoped=path=>`${SCOPE}${path}`;
 const PAGES=["/","/print/","/games/"];
@@ -6,13 +6,13 @@ const STATIC=[
 "/games/projection-mode.css?v=13","/games/projection-mode.js?v=13","/manifest.webmanifest?v=13","/favicon.ico?v=13","/favicon-32.png?v=13","/apple-touch-icon.png?v=13","/icon-192.png?v=13","/icon-512.png?v=13",
 "/balls/football.png","/balls/shuttlecock.png","/balls/bowling.png","/balls/tennis.png","/balls/golf.png","/balls/basketball.png","/balls/billiard.png","/balls/baseball.png","/balls/soccer.png",
 "/space/sun.png","/space/mercury.png","/space/venus.png","/space/earth.png","/space/moon.png","/space/mars.png","/space/jupiter.png","/space/saturn.png","/space/neptune.png",
-"/animals/dog.png","/animals/cat.png","/animals/rabbit.png","/animals/elephant.png","/animals/lion.png","/animals/giraffe.png","/animals/panda.png","/animals/monkey.png","/animals/cow.png",
+"/animals/dog.png","/animals/cat.png","/animals/rabbit.png","/animals/elephant-cream-v2.png","/animals/lion-cream-v2.png","/animals/giraffe-cream-v2.png","/animals/panda.png","/animals/monkey.png","/animals/cow.png",
 "/animals-v2/eagle.webp","/animals-v2/parrot.webp","/animals-v2/butterfly.webp","/animals-v2/dolphin.webp","/animals-v2/sea-turtle.webp","/animals-v2/clownfish.webp",
 "/space-v2/sun.webp","/space-v2/earth.webp","/space-v2/moon.webp","/space-v2/mercury.webp","/space-v2/venus.webp","/space-v2/mars.webp","/space-v2/jupiter.webp","/space-v2/saturn.webp","/space-v2/neptune.webp",
 "/hakka/hakka-rice-noodles.webp","/hakka/cabbage-pork-knuckle.webp","/hakka/stir-fried-water-snowflake.webp","/hakka/ginger-pork-intestine.webp","/hakka/pickled-mustard-tripe-soup.webp","/hakka/pickled-white-radish.webp","/hakka/red-bean-ice.webp","/hakka/brown-sugar-sweet-rice-cake.webp","/hakka/peanut-mochi.webp"
 ];
 async function tell(type,extra={}){const clients=await self.clients.matchAll({includeUncontrolled:true,type:"window"});clients.forEach(c=>c.postMessage({type,...extra}))}
-async function fetchAndStore(cache,url){try{const requestUrl=/\/animals\/(?:elephant|giraffe|lion)\.png$/.test(url)?`${url}?v=14`:url;const r=await fetch(requestUrl,{cache:"reload"});if(r.ok){await cache.put(url,r.clone());return r}return null}catch(_){return null}}
+async function fetchAndStore(cache,url){try{const r=await fetch(url,{cache:"reload"});if(r.ok){await cache.put(url,r.clone());return r}return null}catch(_){return null}}
 self.addEventListener("install",event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE),assets=new Set(STATIC.map(scoped)),pageHtml=[];let done=0,total=PAGES.length+assets.size;for(const path of PAGES){const url=scoped(path),r=await fetchAndStore(cache,url);done++;await tell("OFFLINE_PROGRESS",{percent:Math.round(done/total*100)});if(r){const html=await r.text();pageHtml.push(html);for(const m of html.matchAll(/(?:src|href)=["']([^"'#]+)["']/g)){const u=m[1];if(u.startsWith(SCOPE+"/"))assets.add(u)}}}total=PAGES.length+assets.size;for(const url of assets){await fetchAndStore(cache,url);done++;if(done%4===0||done===total)await tell("OFFLINE_PROGRESS",{percent:Math.min(99,Math.round(done/total*100))})}await self.skipWaiting()})));
 self.addEventListener("activate",event=>event.waitUntil((async()=>{const names=await caches.keys();await Promise.all(names.filter(n=>n!==CACHE).map(n=>caches.delete(n)));await self.clients.claim();await tell("OFFLINE_READY",{percent:100})})()));
 self.addEventListener("message",event=>{if(event.data&&event.data.type==="CHECK_OFFLINE_STATUS"&&event.source)event.source.postMessage({type:"OFFLINE_READY",percent:100})});
