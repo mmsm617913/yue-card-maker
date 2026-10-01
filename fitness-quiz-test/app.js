@@ -2,7 +2,7 @@ const Q = window.YUE_QUESTIONS || [];
 const SUBJECT_NAMES = {PHY:"運動生理",AGE:"發展老化",PATH:"病理風險",PSY:"運動心理",SAFE:"急救安全",NUT:"營養體控",EXRX:"運動處方"};
 const STORE_KEY="yue_fit_quiz_state_v02";
 const ACTIVE_KEY="yue_fit_active_quiz_v02";
-const DATA_VERSION="2026-10-01-v39";
+const DATA_VERSION="2026-10-01-v40";
 const EMPTY_LEARNING={attempts:0,correct:0,wrong:0,streak:0,mastery:"未學習",lastSeen:null,nextReview:null,lapses:0};
 const defaultState={schema:2,dataVersion:DATA_VERSION,learning:{},favorites:{},settings:{sound:true},lastMode:null,currentSubject:"ALL"};
 function clone(x){return JSON.parse(JSON.stringify(x));}
@@ -79,11 +79,42 @@ function learningNote(q){
   if(q.exam_reference_only)return {why:"官網截圖答案："+String.fromCharCode(64+q.official_answer_index)+"．"+q.official_answer_text,memory:"原審查提醒："+q.review_warning+"（供辨識考題，不作實務處置依據。）"};
   return (window.YUE_LEARNING_NOTES||{})[q.uid]||null;
 }
+function nutritionStudyNote(q){
+  const specific={
+    '108-NUT-22':'水溶性選C；脂溶性是A、D、E、K。B群和C屬水溶性，葉酸也是B群（B9）。',
+    '108-NUT-29':'本題選A：預成形維生素A可在體內儲存，長期過量可能有毒性；不要推論成B群、C無論吃多少都安全。',
+    '108-NUT-37':'夜盲症題選A：維生素A參與視覺，缺乏時可能在暗處看不清楚。記法：A看暗處。',
+    '109-NUT-17':'脂溶性選D；A、D、E、K是一組。C和葉酸（B9）屬水溶性。',
+    '109-NUT-20':'視力題選A：維生素A與視網膜的視覺功能有關，缺乏可能造成夜盲症。',
+    '109-NUT-24':'陽光維生素選D：皮膚受日照可合成D，D幫助鈣吸收、維持骨骼。',
+    '110-NUT-24':'凝血題選K。記法：K凝血；E抗氧化，兩者不要交換。',
+    '110-NUT-25':'這組選項選綠花椰菜。C不只在水果，也存在蔬菜；胡蘿蔔則常用來記β胡蘿蔔素可轉成A。',
+    '111-NUT-25':'這題「攝取過多會中毒」的官網答案是B．維生素A，不是C。另一題若先限定「水溶性維生素」，官網才選C；先看題幹是否有限定水溶性。',
+    '113-NUT-146':'這題先限定「水溶性維生素」，官網答案是A．維生素C。C過量可引起腹瀉、噁心、腹部絞痛；題目用「中毒」較籠統，也不代表其他水溶性維生素可無限補充。',
+    '113-NUT-150':'A、D、E、K這組選項中，抗氧化選E。C也具有抗氧化作用，但本題沒有C選項。',
+    '108-NUT-35':'這題官網選C，但不是指C與造血完全無關。B6、B12、葉酸參與紅血球形成；C可促進植物性鐵吸收，間接支持造血。',
+    '114-NUT-108':'本題選葉酸，也叫維生素B9。葉酸參與DNA合成與細胞分裂，並與B12一起支持紅血球形成。',
+    '114-NUT-111':'釋能反應選B1：它協助醣類能量代謝；維生素本身不直接提供熱量。',
+    '114-NUT-107':'這組選項官網選維生素B；鈣、磷、鎂是礦物質。骨骼題也常考維生素D，作用是幫助鈣吸收。',
+    '114-AGE-23':'相關營養記法：鈣是骨骼的重要材料，維生素D幫助鈣吸收；兩者不是相互抵銷。'
+  };
+  const text=[q.stem,...(q.choices||[])].join(' '),parts=[];
+  if(/維生素|vitamin|葉酸|菸鹼|核黃|硫胺/i.test(text)){
+    if(specific[q.uid])parts.push('<p><b>本題辨別：</b>'+escapeHtml(specific[q.uid])+'</p>');
+    parts.push('<p><b>分類：</b>脂溶性＝A、D、E、K；水溶性＝B群、C。脂溶性較易儲存，但水溶性也不是越多越好。</p>');
+    parts.push('<p><b>功能速記：</b>A看暗處；C做膠原、助鐵吸收；D助鈣顧骨；E抗氧化；K凝血。B1助能量代謝，B6、B12、葉酸與紅血球形成有關。</p>');
+    if(/中毒|堆積|過多/.test(q.stem||''))parts.push('<p><b>過量提醒：</b>預成形A過量可傷肝；D過量可能使血鈣過高；高劑量E補充品可能增加出血風險；C過量可造成腸胃不適。不要只靠脂溶／水溶就判斷完全安全。</p>');
+    parts.push('<p><a target="_blank" rel="noopener noreferrer" href="https://medlineplus.gov/ency/article/002399.htm">來源：MedlinePlus 維生素分類與功能</a> · <a target="_blank" rel="noopener noreferrer" href="https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/">NIH：A</a> · <a target="_blank" rel="noopener noreferrer" href="https://ods.od.nih.gov/factsheets/VitaminC-Consumer/">C</a> · <a target="_blank" rel="noopener noreferrer" href="https://ods.od.nih.gov/factsheets/VitaminD-Consumer/">D</a> · <a target="_blank" rel="noopener noreferrer" href="https://ods.od.nih.gov/factsheets/VitaminE-Consumer/">E</a></p>');
+  }
+  if(['111-NUT-29','113-NUT-142'].includes(q.uid))parts.push('<p><b>水果、蔬菜別記反：</b>水果2–4份；蔬菜3–5份（指南圖示也寫3–5碟）。口訣：果二四、菜三五。題目問蔬菜選3–5，問水果選2–4；這是每日範圍，不是每餐，個人份量仍依熱量需求調整。</p><p><a target="_blank" rel="noopener noreferrer" href="https://shenkeng.health.ntpc.gov.tw/article/%E4%B8%8B%E8%BC%89%E5%B0%88%E5%8D%80">來源：衛生所每日飲食指南</a></p>');
+  return parts.length?'<div class="memory-hook"><b>營養知識備註</b>'+parts.join('')+'</div>':'';
+}
 function noteHtml(q){
   const note=learningNote(q)||{};
   const generic=/這題是在找例外|先抓題幹的核心條件|先辨認考點，再比較四個選項|先圈起來再作答/;
   const why=String(note.why||"").trim(),memory=String(note.memory||"").trim();
-  const parts=[];
+  const nutrition=nutritionStudyNote(q);
+  const parts=nutrition?[nutrition]:[];
   if(q.brief_explanation){
     parts.push('<div><b>考點解析：</b>'+escapeHtml(q.brief_explanation)+'</div>');
     (q.brief_explanation_sources||[]).filter(source=>/^https:\/\//.test(source.url)).forEach(source=>parts.push('<div><a target="_blank" rel="noopener noreferrer" href="'+escapeHtml(source.url)+'">參考：'+escapeHtml(source.title)+'</a></div>'));
@@ -127,5 +158,5 @@ function showScreen(id){if(window.syncReadingControls)window.syncReadingControls
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
 function $(sel){return document.querySelector(sel)}
 document.addEventListener("click",e=>{const btn=e.target.closest?.("button");if(!btn||btn.disabled||btn.classList.contains("choice")||btn.dataset.soundControl)return;playButtonSound("tap")});window.addEventListener("online",updateNetworkStatus);window.addEventListener("offline",updateNetworkStatus);window.addEventListener("beforeunload",()=>{if(quiz&&!quiz.finished)persistQuiz()});document.addEventListener("visibilitychange",()=>{if(document.hidden&&quiz&&!quiz.finished)persistQuiz()});
-async function bootYueFitApp(){if(Q.length!==917){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20261001-v39");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
+async function bootYueFitApp(){if(Q.length!==922){document.body.innerHTML='<div style="padding:30px;font-family:sans-serif">題庫載入失敗，請重新整理或清除舊快取。</div>';return}if("serviceWorker" in navigator){try{const reg=await navigator.serviceWorker.register("./sw.js?v=20261001-v40");await reg.update()}catch(e){console.warn("SW register failed",e)}}try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}renderHome();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootYueFitApp,{once:true});else bootYueFitApp();
