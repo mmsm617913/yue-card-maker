@@ -1,0 +1,35 @@
+/* Animal-only repair: keep subjects intact and remove white inset/corners.
+   Screen preview, A/B faces and teacher PDFs share these exact rules. */
+.physical-card:has(img[src*="/halloween"]),
+.mini-physical-card:has(img[src*="/halloween"]),
+.question-cell:has(img[src*="/halloween"]) {
+  background: #f5ebdd !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.physical-card > img.ball-image[src*="/halloween"],
+.mini-physical-card img.ball-image[src*="/halloween"],
+.print-app .question-cell img.ball-image[src*="/halloween"] {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none !important;
+  display: block;
+}
+
+img[src*="/halloween/"] { object-fit: contain !important; object-position: center !important; }
+/* Keep all nine cards above controls in the normal Halloween view. */
+:where(body:not(:has([class*="tvMode"]))) [class*="__stage"]:has(img[src*="/halloween/"]) {
+  aspect-ratio: auto;
+  max-height: none;
+  grid-template-rows: auto auto auto auto;
+}
+:where(body:not(:has([class*="tvMode"]))) [class*="__board"]:has(img[src*="/halloween/"]) {
+  height: auto;
+  max-height: none;
+}

@@ -1,0 +1,103 @@
+{
+  "label": "萬聖節派對",
+  "shortLabel": "萬聖節",
+  "icon": "🎃",
+  "versions": [
+    {
+      "id": "v1",
+      "label": "V1 歡樂插畫版",
+      "code": "YYH-HALLOWEEN-V1",
+      "printedNote": "高彩度細節插畫＋萬聖節淡色浮水印",
+      "categories": [
+        "節慶裝扮",
+        "夜間動物",
+        "派對驚喜"
+      ],
+      "pieces": [
+        {
+          "id": 1,
+          "a": 0,
+          "b": 1
+        },
+        {
+          "id": 2,
+          "a": 1,
+          "b": 2
+        },
+        {
+          "id": 3,
+          "a": 2,
+          "b": 3
+        },
+        {
+          "id": 4,
+          "a": 3,
+          "b": 4
+        },
+        {
+          "id": 5,
+          "a": 4,
+          "b": 5
+        },
+        {
+          "id": 6,
+          "a": 5,
+          "b": 6
+        },
+        {
+          "id": 7,
+          "a": 6,
+          "b": 7
+        },
+        {
+          "id": 8,
+          "a": 7,
+          "b": 8
+        },
+        {
+          "id": 9,
+          "a": 8,
+          "b": 0
+        }
+      ],
+      "items": [
+        {
+          "name": "南瓜燈",
+          "image": "/halloween/pumpkin.webp"
+        },
+        {
+          "name": "巫師帽",
+          "image": "/halloween/witch-hat.webp"
+        },
+        {
+          "name": "掃帚",
+          "image": "/halloween/broom.webp"
+        },
+        {
+          "name": "黑貓",
+          "image": "/halloween/black-cat.webp"
+        },
+        {
+          "name": "蝙蝠",
+          "image": "/halloween/bat.webp"
+        },
+        {
+          "name": "貓頭鷹",
+          "image": "/halloween/owl.webp"
+        },
+        {
+          "name": "小幽靈",
+          "image": "/halloween/ghost.webp"
+        },
+        {
+          "name": "糖果",
+          "image": "/halloween/candy.webp"
+        },
+        {
+          "name": "提糖桶",
+          "image": "/halloween/bucket.webp"
+        }
+      ]
+    }
+  ]
+}
