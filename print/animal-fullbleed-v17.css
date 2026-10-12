@@ -1,0 +1,23 @@
+/* Animal-only repair: keep subjects intact and remove white inset/corners.
+   Screen preview, A/B faces and teacher PDFs share these exact rules. */
+.physical-card:has(img[src*="/animals"]),
+.mini-physical-card:has(img[src*="/animals"]),
+.question-cell:has(img[src*="/animals"]) {
+  background: #f5ebdd !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.physical-card > img.ball-image[src*="/animals"],
+.mini-physical-card img.ball-image[src*="/animals"],
+.print-app .question-cell img.ball-image[src*="/animals"] {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none !important;
+  display: block;
+}
