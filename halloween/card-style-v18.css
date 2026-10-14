@@ -33,3 +33,33 @@ img[src*="/halloween/"] { object-fit: contain !important; object-position: cente
   height: auto;
   max-height: none;
 }
+/* Child-controlled start: the waiting area contains only theme watermarks. */
+.halloween-child-round { aspect-ratio: auto; max-height: none; grid-template-rows: auto auto auto auto; }
+.halloween-waiting {
+  width: 100%; min-height: clamp(280px, 54vh, 540px);
+  background-color: #fff7e8;
+  background-image: url('/yue-card-maker/halloween/watermark-v21.svg');
+  background-repeat: repeat; background-size: 420px 360px;
+  border-radius: 12px;
+}
+.halloween-child-round .halloween-round-note { font-size: clamp(15px, 1.1vw, 19px); line-height: 1.5; }
+.halloween-child-round [class*="__actionBar"] { grid-template-columns: minmax(220px, 1fr) minmax(180px, 1fr); }
+.halloween-child-round .halloween-start { height: auto; min-height: 78px; padding: 12px 24px 8px; touch-action: manipulation; }
+.halloween-start-label { display: inline-flex; justify-content: center; gap: 8px; font-size: 34px; line-height: 1.25; }
+.halloween-start-label ruby { ruby-position: over; }
+.halloween-start-label rt { font-size: 17px; font-weight: 700; }
+.halloween-child-round .halloween-clock { font-size: clamp(20px, 2vw, 32px); font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 700px) {
+  .halloween-child-round [class*="__actionBar"] { grid-template-columns: 1fr; gap: 8px; padding: 10px; }
+  .halloween-waiting { min-height: 300px; background-size: 300px 257px; }
+  .halloween-child-round .halloween-clock { display: block; grid-column: 2; font-size: 20px; text-align: left; }
+}
+[class*="tvMode"] .halloween-child-round { height: 100dvh; min-height: 0; max-height: none; grid-template-rows: auto minmax(0,1fr) auto auto; }
+[class*="tvMode"] .halloween-waiting { min-height: 0; height: 100%; }
+/* Prevent the default theme's question from flashing during direct entry. */
+html[data-halloween-entry="pending"] [class*="__playArea"] {
+  min-height: clamp(280px, 54vh, 540px);
+  background: #fff7e8 url('/yue-card-maker/halloween/watermark-v21.svg') repeat;
+  background-size: 420px 360px;
+}
+html[data-halloween-entry="pending"] [class*="__playArea"] > * { visibility: hidden; }
