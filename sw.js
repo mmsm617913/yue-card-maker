@@ -1,9 +1,9 @@
-const CACHE="yue-card-maker-v18-halloween";
+const CACHE="yue-card-maker-v19-halloween-name";
 const SCOPE=new URL(self.registration.scope).pathname.replace(/\/$/,"");
 const scoped=path=>`${SCOPE}${path}`;
 const PAGES=["/","/print/","/games/"];
 const STATIC=[
-"/halloween/card-style-v18.css","/halloween/entry-v18.js","/halloween/pumpkin.webp","/halloween/witch-hat.webp","/halloween/broom.webp","/halloween/black-cat.webp","/halloween/bat.webp","/halloween/owl.webp","/halloween/ghost.webp","/halloween/candy.webp","/halloween/bucket.webp",
+"/halloween/card-style-v18.css?v=19","/halloween/entry-v18.js?v=19","/halloween/pumpkin.webp","/halloween/witch-hat.webp","/halloween/broom.webp","/halloween/black-cat.webp","/halloween/bat.webp","/halloween/owl.webp","/halloween/ghost.webp","/halloween/candy.webp","/halloween/bucket.webp",
 "/games/projection-mode.css?v=13","/games/projection-mode.js?v=13","/manifest.webmanifest?v=13","/favicon.ico?v=13","/favicon-32.png?v=13","/apple-touch-icon.png?v=13","/icon-192.png?v=13","/icon-512.png?v=13",
 "/balls/football.png","/balls/shuttlecock.png","/balls/bowling.png","/balls/tennis.png","/balls/golf.png","/balls/basketball.png","/balls/billiard.png","/balls/baseball.png","/balls/soccer.png",
 "/space/sun.png","/space/mercury.png","/space/venus.png","/space/earth.png","/space/moon.png","/space/mars.png","/space/jupiter.png","/space/saturn.png","/space/neptune.png",
